@@ -188,11 +188,18 @@ namespace MixItUp.WPF.Controls.Actions
                     if (ChannelSession.Services.OBSWebsocket != null || await ChannelSession.Services.InitializeOBSWebsocket())
                     {
                         OBSSourceDimensions dimensions = ChannelSession.Services.OBSWebsocket.GetSourceDimensions(this.OBSStudioSourceNameTextBox.Text);
-                        this.OBSStudioSourceDimensionsXPositionTextBox.Text = dimensions.X.ToString();
-                        this.OBSStudioSourceDimensionsYPositionTextBox.Text = dimensions.Y.ToString();
-                        this.OBSStudioSourceDimensionsRotationTextBox.Text = dimensions.Rotation.ToString();
-                        this.OBSStudioSourceDimensionsXScaleTextBox.Text = dimensions.XScale.ToString();
-                        this.OBSStudioSourceDimensionsYScaleTextBox.Text = dimensions.YScale.ToString();
+                        if (dimensions != null)
+                        {
+                            this.OBSStudioSourceDimensionsXPositionTextBox.Text = dimensions.X.ToString();
+                            this.OBSStudioSourceDimensionsYPositionTextBox.Text = dimensions.Y.ToString();
+                            this.OBSStudioSourceDimensionsRotationTextBox.Text = dimensions.Rotation.ToString();
+                            this.OBSStudioSourceDimensionsXScaleTextBox.Text = dimensions.XScale.ToString();
+                            this.OBSStudioSourceDimensionsYScaleTextBox.Text = dimensions.YScale.ToString();
+                        }
+                        else
+                        {
+                            await MessageBoxHelper.ShowMessageDialog("Could not find a source with the name specified, please check you entered the name correctly.");
+                        }
                     }
                     else
                     {

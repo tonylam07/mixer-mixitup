@@ -33,6 +33,9 @@ namespace MixItUp.Base.Actions
         [DataMember]
         public string SourceURL { get; set; }
 
+        [DataMember]
+        public XSplitSourceDimensions SourceDimensions { get; set; }
+
         [JsonIgnore]
         private string currentTextToWrite { get; set; }
 
@@ -43,8 +46,6 @@ namespace MixItUp.Base.Actions
         public XSplitAction(string sourceName, bool sourceVisible, string sourceText = null, string sourceURL = null)
             : this(sourceName, sourceVisible)
         {
-            this.SourceName = sourceName;
-            this.SourceVisible = sourceVisible;
             this.SourceText = sourceText;
             this.SourceURL = sourceURL;
             if (!string.IsNullOrEmpty(this.SourceURL))
@@ -54,6 +55,12 @@ namespace MixItUp.Base.Actions
                     this.SourceURL = "http://" + this.SourceURL;
                 }
             }
+        }
+
+        public XSplitAction(string sourceName, bool sourceVisible, XSplitSourceDimensions sourceDimensions)
+            : this(sourceName, sourceVisible)
+        {
+            this.SourceDimensions = sourceDimensions;
         }
 
         private XSplitAction(string sourceName, bool sourceVisible)
@@ -108,6 +115,10 @@ namespace MixItUp.Base.Actions
                     {
                         string url = await this.ReplaceStringWithSpecialModifiers(this.SourceURL, user, arguments);
                         await ChannelSession.Services.XSplitServer.SetWebBrowserSource(new XSplitWebBrowserSource() { sourceName = this.SourceName, sourceVisible = this.SourceVisible, webBrowserUrl = url });
+                    }
+                    else if (this.SourceDimensions != null)
+                    {
+                        await ChannelSession.Services.XSplitServer.SetSourceDimensions(this.SourceDimensions);
                     }
                     await ChannelSession.Services.XSplitServer.SetSourceVisibility(new XSplitSource() { sourceName = this.SourceName, sourceVisible = this.SourceVisible });
                 }

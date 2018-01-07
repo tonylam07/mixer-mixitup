@@ -33,7 +33,7 @@ namespace MixItUp.WPF.Util
         public static async Task ShowMessageDialog(string message)
         {
             DialogHost dialogHost = MessageBoxHelper.GetDialogHost();
-            if (!isDialogShown)
+            if (dialogHost != null && !isDialogShown)
             {
                 MessageBoxHelper.isDialogShown = true;
                 await dialogHost.ShowDialog(new BasicDialogControl(message));
@@ -44,7 +44,7 @@ namespace MixItUp.WPF.Util
         public static async Task<bool> ShowConfirmationDialog(string message)
         {
             DialogHost dialogHost = MessageBoxHelper.GetDialogHost();
-            if (!isDialogShown)
+            if (dialogHost != null && !isDialogShown)
             {
                 MessageBoxHelper.isDialogShown = true;
                 dialogHost.DialogClosing += ConfirmationDialogHost_DialogClosing;
@@ -59,7 +59,7 @@ namespace MixItUp.WPF.Util
         public static async Task<UserDialogResult> ShowUserDialog(UserViewModel user)
         {
             DialogHost dialogHost = MessageBoxHelper.GetDialogHost();
-            if (!isDialogShown)
+            if (dialogHost != null && !isDialogShown)
             {
                 MessageBoxHelper.isDialogShown = true;
                 dialogHost.DialogClosing += UserDialogHost_DialogClosing;
@@ -74,7 +74,7 @@ namespace MixItUp.WPF.Util
         public static async Task<string> ShowCustomDialog(UserControl control)
         {
             DialogHost dialogHost = MessageBoxHelper.GetDialogHost();
-            if (!isDialogShown)
+            if (dialogHost != null && !isDialogShown)
             {
                 MessageBoxHelper.isDialogShown = true;
                 dialogHost.DialogClosing += CustomDialogHost_DialogClosing;
@@ -89,7 +89,10 @@ namespace MixItUp.WPF.Util
         public static void CloseDialog()
         {
             DialogHost dialogHost = MessageBoxHelper.GetDialogHost();
-            dialogHost.IsOpen = false;
+            if (dialogHost != null)
+            {
+                dialogHost.IsOpen = false;
+            }
         }
 
         private static DialogHost GetDialogHost()
@@ -99,10 +102,15 @@ namespace MixItUp.WPF.Util
             {
                 return (DialogHost)windows.First().FindName("MDDialogHost");
             }
-            else
+            else if (windows.Count() > 1)
             {
-                return (DialogHost)windows.FirstOrDefault(x => x.IsActive).FindName("MDDialogHost");
+                LoadingWindowBase window = windows.FirstOrDefault(x => x.IsActive);
+                if (window != null)
+                {
+                    return (DialogHost)window.FindName("MDDialogHost");
+                }
             }
+            return null;
         }
 
         private static void ConfirmationDialogHost_DialogClosing(object sender, DialogClosingEventArgs eventArgs)

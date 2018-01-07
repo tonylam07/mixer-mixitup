@@ -1,6 +1,8 @@
 ﻿using Mixer.Base.Util;
 using MixItUp.Base;
 using MixItUp.Base.Actions;
+using MixItUp.Base.Services;
+using MixItUp.WPF.Util;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,7 +23,9 @@ namespace MixItUp.WPF.Controls.Actions
             [Name("Text Source")]
             TextSource,
             [Name("Web Browser Source")]
-            WebBrowserSource
+            WebBrowserSource,
+            [Name("Source Dimensions")]
+            SourceDimensions
         }
 
         private XSplitAction action;
@@ -54,6 +58,17 @@ namespace MixItUp.WPF.Controls.Actions
                     {
                         this.XSplitSourceWebPageTextBox.Text = this.action.SourceURL;
                         this.XSplitTypeComboBox.SelectedItem = EnumHelper.GetEnumName(XSplitTypeEnum.WebBrowserSource);
+                    }
+                    else if (this.action.SourceDimensions != null)
+                    {
+                        this.XSplitSourceDimensionsXPositionTextBox.Text = this.action.SourceDimensions.Left.ToString();
+                        this.XSplitSourceDimensionsYPositionTextBox.Text = this.action.SourceDimensions.Top.ToString();
+                        this.XSplitSourceDimensionsWidthTextBox.Text = this.action.SourceDimensions.Right.ToString();
+                        this.XSplitSourceDimensionsHeightTextBox.Text = this.action.SourceDimensions.Bottom.ToString();
+                        this.XSplitSourceDimensionsXRotationTextBox.Text = this.action.SourceDimensions.RotateX.ToString();
+                        this.XSplitSourceDimensionsYRotationTextBox.Text = this.action.SourceDimensions.RotateY.ToString();
+                        this.XSplitSourceDimensionsZRotationTextBox.Text = this.action.SourceDimensions.RotateZ.ToString();
+                        this.XSplitTypeComboBox.SelectedItem = EnumHelper.GetEnumName(XSplitTypeEnum.SourceDimensions);
                     }
                     else
                     {
@@ -90,11 +105,22 @@ namespace MixItUp.WPF.Controls.Actions
                             return new XSplitAction(this.XSplitSourceNameTextBox.Text, this.XSplitSourceVisibleCheckBox.IsChecked.GetValueOrDefault(), null, this.XSplitSourceWebPageTextBox.Text);
                         }
                     }
+                    else if (this.XSplitSourceDimensionsGrid.Visibility == Visibility.Visible)
+                    {
+                        float left, top, right, bottom, rotateX, rotateY, rotateZ;
+                        if (float.TryParse(this.XSplitSourceDimensionsXPositionTextBox.Text, out left) && float.TryParse(this.XSplitSourceDimensionsYPositionTextBox.Text, out top) &&
+                            float.TryParse(this.XSplitSourceDimensionsWidthTextBox.Text, out right) && float.TryParse(this.XSplitSourceDimensionsHeightTextBox.Text, out bottom) &&
+                            float.TryParse(this.XSplitSourceDimensionsXRotationTextBox.Text, out rotateX) && float.TryParse(this.XSplitSourceDimensionsYRotationTextBox.Text, out rotateY) &&
+                            float.TryParse(this.XSplitSourceDimensionsZRotationTextBox.Text, out rotateZ))
+                        {
+                            return new XSplitAction(this.XSplitSourceNameTextBox.Text, this.XSplitSourceVisibleCheckBox.IsChecked.GetValueOrDefault(),
+                                new XSplitSourceDimensions() { Name = this.XSplitSourceNameTextBox.Text, Left = left, Top = top, Right = right, Bottom = bottom,
+                                    RotateX = rotateX, RotateY = rotateY, RotateZ = rotateZ });
+                        }
+                    }
                     else
                     {
-                        XSplitAction action = new XSplitAction(this.XSplitSourceNameTextBox.Text, this.XSplitSourceVisibleCheckBox.IsChecked.GetValueOrDefault());
-                        action.UpdateReferenceTextFile();
-                        return action;
+                        return new XSplitAction(this.XSplitSourceNameTextBox.Text, this.XSplitSourceVisibleCheckBox.IsChecked.GetValueOrDefault());
                     }
                 }
             }
@@ -103,10 +129,11 @@ namespace MixItUp.WPF.Controls.Actions
 
         private void XSplitTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.XSplitSceneGrid.Visibility = Visibility.Hidden;
-            this.XSplitSourceGrid.Visibility = Visibility.Hidden;
-            this.XSplitSourceTextGrid.Visibility = Visibility.Hidden;
-            this.XSplitSourceWebBrowserGrid.Visibility = Visibility.Hidden;
+            this.XSplitSceneGrid.Visibility = Visibility.Collapsed;
+            this.XSplitSourceGrid.Visibility = Visibility.Collapsed;
+            this.XSplitSourceTextGrid.Visibility = Visibility.Collapsed;
+            this.XSplitSourceWebBrowserGrid.Visibility = Visibility.Collapsed;
+            this.XSplitSourceDimensionsGrid.Visibility = Visibility.Collapsed;
             if (this.XSplitTypeComboBox.SelectedIndex >= 0)
             {
                 XSplitTypeEnum xsplitType = EnumHelper.GetEnumValueFromString<XSplitTypeEnum>((string)this.XSplitTypeComboBox.SelectedItem);
@@ -124,6 +151,10 @@ namespace MixItUp.WPF.Controls.Actions
                     else if (xsplitType == XSplitTypeEnum.WebBrowserSource)
                     {
                         this.XSplitSourceWebBrowserGrid.Visibility = Visibility.Visible;
+                    }
+                    else if (xsplitType == XSplitTypeEnum.SourceDimensions)
+                    {
+                        this.XSplitSourceDimensionsGrid.Visibility = Visibility.Visible;
                     }
                 }
             }
@@ -143,6 +174,38 @@ namespace MixItUp.WPF.Controls.Actions
             if (!string.IsNullOrEmpty(filePath))
             {
                 this.XSplitSourceWebPageTextBox.Text = filePath;
+            }
+        }
+
+        private async void GetSourcesDimensionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(this.XSplitSourceNameTextBox.Text))
+            {
+                await this.containerControl.RunAsyncOperation(async () =>
+                {
+                    if (ChannelSession.Services.XSplitServer != null || await ChannelSession.Services.InitializeXSplitServer())
+                    {
+                        XSplitSourceDimensions dimensions = await ChannelSession.Services.XSplitServer.GetSourceDimensions(new XSplitSource() { sourceName = this.XSplitSourceNameTextBox.Text });
+                        if (dimensions != null)
+                        {
+                            this.XSplitSourceDimensionsXPositionTextBox.Text = dimensions.Left.ToString();
+                            this.XSplitSourceDimensionsYPositionTextBox.Text = dimensions.Top.ToString();
+                            this.XSplitSourceDimensionsWidthTextBox.Text = dimensions.Right.ToString();
+                            this.XSplitSourceDimensionsHeightTextBox.Text = dimensions.Bottom.ToString();
+                            this.XSplitSourceDimensionsXRotationTextBox.Text = dimensions.RotateX.ToString();
+                            this.XSplitSourceDimensionsYRotationTextBox.Text = dimensions.RotateY.ToString();
+                            this.XSplitSourceDimensionsZRotationTextBox.Text = dimensions.RotateZ.ToString();
+                        }
+                        else
+                        {
+                            await MessageBoxHelper.ShowMessageDialog("Could not find a source with the name specified, please check you entered the name correctly.");
+                        }
+                    }
+                    else
+                    {
+                        await MessageBoxHelper.ShowMessageDialog("Could not connect to XSplit. Please try establishing connection with it in the Services area.");
+                    }
+                });
             }
         }
     }

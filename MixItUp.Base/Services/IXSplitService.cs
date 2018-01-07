@@ -27,6 +27,27 @@ namespace MixItUp.Base.Services
         public string webBrowserUrl;
     }
 
+    [DataContract]
+    public class XSplitSourceDimensions
+    {
+        [DataMember]
+        public string Name;
+        [DataMember]
+        public float Top;
+        [DataMember]
+        public float Bottom;
+        [DataMember]
+        public float Left;
+        [DataMember]
+        public float Right;
+        [DataMember]
+        public float RotateX;
+        [DataMember]
+        public float RotateY;
+        [DataMember]
+        public float RotateZ;
+    }
+
     public interface IXSplitService
     {
         event EventHandler Disconnected;
@@ -35,11 +56,15 @@ namespace MixItUp.Base.Services
 
         Task<bool> TestConnection();
 
+        Task<XSplitSourceDimensions> GetSourceDimensions(XSplitSource source);
+
         Task SetCurrentScene(XSplitScene scene);
 
         Task SetSourceVisibility(XSplitSource source);
 
         Task SetWebBrowserSource(XSplitWebBrowserSource source);
+
+        Task SetSourceDimensions(XSplitSourceDimensions dimensions);
 
         Task Disconnect();
     }

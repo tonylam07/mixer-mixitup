@@ -80,9 +80,9 @@ namespace MixItUp.Base.Util
         {
             this.connectionTestSuccessful = false;
             await this.Send(new WebSocketPacket() { type = "test" });
-            for (int i = 0; i < 5 && !this.connectionTestSuccessful; i++)
+            for (int i = 0; i < 10 && !this.connectionTestSuccessful; i++)
             {
-                await Task.Delay(500);
+                await Task.Delay(250);
             }
             return this.connectionTestSuccessful;
         }

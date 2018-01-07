@@ -17,6 +17,20 @@
     <script src="../Overlay/webSocketWrapper.js"></script>
 
     <script>
+        class SourceDimensions {
+            constructor(source, item)
+            {
+                this.Name = source._cname;
+                this.Top = item.getTop();
+                this.Bottom = item.getBottom();
+                this.Left = item.getLeft();
+                this.Right = item.getRight();
+                this.RotateX = item.getRotateX();
+                this.RotateY = item.getRotateY();
+                this.RotateZ = item.getRotateZ();
+            }
+        }
+
         var xjs = require('xjs');
         var eventsDiv = document.getElementById('eventsDiv');
         var disconnected = true;
@@ -46,6 +60,10 @@
                     {
                         eventsDiv.innerHTML += 'Connection Test Successful!<BR>';
                     }
+                    else if (packet.type === "getSourceDimensions")
+                    {
+                        getSourceDimensions(packet.data);
+                    }
                     else if (packet.type === "sceneTransition")
                     {
                         sceneTransition(packet.data);
@@ -53,6 +71,10 @@
                     else if (packet.type === "sourceUpdate")
                     {
                         sourceUpdate(packet.data);
+                    }
+                    else if (packet.type === "setSourceDimensions")
+                    {
+                        setSourceDimensions(packet.data);
                     }
                 }
             }
@@ -116,6 +138,82 @@
                                     }
                                 }
                             });
+                        }
+                    }
+                }
+            });
+        }
+
+        function getSourceDimensions(data)
+        {
+            eventsDiv.innerHTML += 'Get Source Info: ' + data.sourceName + '<BR>';
+
+            xjs.ready().then(function ()
+            {
+                return xjs.Scene.getActiveScene();
+            }).then(function (scene)
+            {
+                return scene.getSources();
+            }).then(function (sources)
+            {
+                if (sources != null && sources.length > 0)
+                {
+                    for (let i = 0; i < sources.length; i++)
+                    {
+                        if (sources[i]._cname == data.sourceName)
+                        {
+                            sources[i].getItemList().then(function (items)
+                            {
+                                if (items != null && items.length > 0)
+                                {
+                                    for (let j = 0; j < items.length; j++)
+                                    {
+                                        try
+                                        {
+                                            var dimensions = new SourceDimensions(sources[i], items[j]);
+                                            if (dimensions != null)
+                                            {
+                                                sendPacket('getSourceInfo', dimensions);
+                                                return;
+                                            }
+                                        }
+                                        catch (err) { logException(err); }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        }
+
+        function setSourceDimensions(data)
+        {
+            eventsDiv.innerHTML += 'Set Source Info: ' + data.sourceName + '<BR>';
+
+            xjs.ready().then(function ()
+            {
+                return xjs.Scene.getActiveScene();
+            }).then(function (scene)
+            {
+                return scene.getSources();
+            }).then(function (sources)
+            {
+                if (sources != null && sources.length > 0)
+                {
+                    for (let i = 0; i < sources.length; i++)
+                    {
+                        if (sources[i]._cname == data.sourceName)
+                        {
+                            try
+                            {
+                                var rect = xjs.Rectangle.fromCoordinates(data.Left, data.Top, data.Right, data.Bottom);
+                                sources[i].setPosition(rect);
+                                sources[i].setRotateX(rect.RotateX);
+                                sources[i].setRotateY(rect.RotateY);
+                                sources[i].setRotateZ(rect.RotateZ);
+                            }
+                            catch (err) { logException(err); }
                         }
                     }
                 }
