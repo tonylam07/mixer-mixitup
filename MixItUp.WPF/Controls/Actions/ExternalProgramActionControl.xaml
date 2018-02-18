@@ -23,11 +23,11 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBox Grid.Column="0" x:Name="ProgramFilePathTextBox" MaterialDesign:HintAssist.Hint="Program File Path" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-            <Button Grid.Column="2" x:Name="ProgramFileBrowseButton" Click="ProgramFileBrowseButton_Click">Browse</Button>
+            <TextBox Grid.Column="0" x:Name="ProgramFilePathTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='ProgramFilePath'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <Button Grid.Column="2" x:Name="ProgramFileBrowseButton" Click="ProgramFileBrowseButton_Click" Content="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='Browse'}" />
         </Grid>
 
-        <TextBox Grid.Row="2" x:Name="ProgramArgumentsTextBox" MaterialDesign:HintAssist.Hint="Program Arguments" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+        <TextBox Grid.Row="2" x:Name="ProgramArgumentsTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='Program Arguments'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
@@ -40,10 +40,10 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" VerticalAlignment="Center">Show Window:</TextBlock>
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='ShowWindowHeader'}" />
             <CheckBox Grid.Column="2" x:Name="ShowWindowCheckBox" VerticalAlignment="Bottom" />
 
-            <TextBlock Grid.Column="4" VerticalAlignment="Center">Wait For Finish:</TextBlock>
+            <TextBlock Grid.Column="4" VerticalAlignment="Center" Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='WaitForFinishHeader'}" />
             <CheckBox Grid.Column="6" x:Name="WaitForFinishCheckBox" VerticalAlignment="Bottom" />
         </Grid>
     </Grid>

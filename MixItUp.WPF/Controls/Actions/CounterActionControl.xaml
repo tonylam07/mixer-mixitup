@@ -27,13 +27,13 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0">Special Identifier Name (Only Letters &amp; Numbers Allowed, no $):</TextBlock>
+            <TextBlock Grid.Column="0" Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='SpecialIdentifierNameHeader'}" />
 
-            <TextBlock Grid.Column="2">Save To File:</TextBlock>
-            <ToggleButton Grid.Column="4" x:Name="SaveToFileToggleButton" Checked="SaveToFileToggleButton_Checked" Unchecked="SaveToFileToggleButton_Checked" ToolTip="Save To File" />
+            <TextBlock Grid.Column="2" Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='SaveToFileHeader'}" />
+            <ToggleButton Grid.Column="4" x:Name="SaveToFileToggleButton" Checked="SaveToFileToggleButton_Checked" Unchecked="SaveToFileToggleButton_Checked" />
 
-            <TextBlock Grid.Column="6">Reset On Load:</TextBlock>
-            <ToggleButton Grid.Column="8" x:Name="ResetOnLoadToggleButton" ToolTip="Reset On Load" IsChecked="True" IsEnabled="False" />
+            <TextBlock Grid.Column="6" Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='ResetOnLoadHeader'}" />
+            <ToggleButton Grid.Column="8" x:Name="ResetOnLoadToggleButton" IsChecked="True" IsEnabled="False" />
 
         </Grid>
 
@@ -46,11 +46,11 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBox Grid.Column="0" x:Name="CounterNameTextBox" MaterialDesign:HintAssist.Hint="Counter Name (No $)" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <TextBox Grid.Column="0" x:Name="CounterNameTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='CounterName'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
-            <ComboBox Grid.Column="2" x:Name="CounterActionTypeComboBox"  MaterialDesign:HintAssist.Hint="Action" Style="{StaticResource BackgroundComboBox}" Width="150" SelectionChanged="CounterActionTypeComboBox_SelectionChanged" />
-            
-            <TextBox Grid.Column="4" x:Name="CounterAmountTextBox" MaterialDesign:HintAssist.Hint="Amount (+/-)" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Width="150" />
+            <ComboBox Grid.Column="2" x:Name="CounterActionTypeComboBox"  MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='Action'}" Style="{StaticResource BackgroundComboBox}" Width="150" SelectionChanged="CounterActionTypeComboBox_SelectionChanged" />
+
+            <TextBox Grid.Column="4" x:Name="CounterAmountTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='AmountPlusMinus'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Width="150" />
         </Grid>
 
     </Grid>

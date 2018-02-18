@@ -61,11 +61,263 @@ namespace MixItUp.Base.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Action.
+        /// </summary>
+        public static string Action {
+            get {
+                return ResourceManager.GetString("Action", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Action Group.
+        /// </summary>
+        public static string ActionGroup {
+            get {
+                return ResourceManager.GetString("ActionGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Amount (+/-).
+        /// </summary>
+        public static string AmountPlusMinus {
+            get {
+                return ResourceManager.GetString("AmountPlusMinus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse.
+        /// </summary>
+        public static string Browse {
+            get {
+                return ResourceManager.GetString("Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chat Message.
+        /// </summary>
+        public static string ChatMessage {
+            get {
+                return ResourceManager.GetString("ChatMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Counter Name (No $).
+        /// </summary>
+        public static string CounterName {
+            get {
+                return ResourceManager.GetString("CounterName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Whoops! Looks like we ran into an issue and we&apos;ll have to close the program. Would you like to submit a bug to help us improve Mix It Up?.
+        /// </summary>
+        public static string CrashOccurredMessage {
+            get {
+                return ResourceManager.GetString("CrashOccurredMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currency/Rank Type.
+        /// </summary>
+        public static string CurrencyRankType {
+            get {
+                return ResourceManager.GetString("CurrencyRankType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Path.
+        /// </summary>
+        public static string FilePath {
+            get {
+                return ResourceManager.GetString("FilePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game Queue Action.
+        /// </summary>
+        public static string GameQueueAction {
+            get {
+                return ResourceManager.GetString("GameQueueAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         public static string Login {
             get {
                 return ResourceManager.GetString("Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mix It Up - Crash.
+        /// </summary>
+        public static string MessageBoxCrash {
+            get {
+                return ResourceManager.GetString("MessageBoxCrash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Program Arguments.
+        /// </summary>
+        public static string ProgramArguments {
+            get {
+                return ResourceManager.GetString("ProgramArguments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Program File Path.
+        /// </summary>
+        public static string ProgramFilePath {
+            get {
+                return ResourceManager.GetString("ProgramFilePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        public static string Reset {
+            get {
+                return ResourceManager.GetString("Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset On Load:.
+        /// </summary>
+        public static string ResetOnLoadHeader {
+            get {
+                return ResourceManager.GetString("ResetOnLoadHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save To File:.
+        /// </summary>
+        public static string SaveToFileHeader {
+            get {
+                return ResourceManager.GetString("SaveToFileHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send As Streamer:.
+        /// </summary>
+        public static string SendAsStreamerHeader {
+            get {
+                return ResourceManager.GetString("SendAsStreamerHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Window:.
+        /// </summary>
+        public static string ShowWindowHeader {
+            get {
+                return ResourceManager.GetString("ShowWindowHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special Identifier Name (Only Letters &amp;amp; Numbers Allowed, no $).
+        /// </summary>
+        public static string SpecialIdentifierName {
+            get {
+                return ResourceManager.GetString("SpecialIdentifierName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special Identifier Name (Only Letters &amp;amp; Numbers Allowed, no $):.
+        /// </summary>
+        public static string SpecialIdentifierNameHeader {
+            get {
+                return ResourceManager.GetString("SpecialIdentifierNameHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special Identifiers Reference.
+        /// </summary>
+        public static string SpecialIdentifiersReference {
+            get {
+                return ResourceManager.GetString("SpecialIdentifiersReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special Identifier To Save To.
+        /// </summary>
+        public static string SpecialIdentifierToSaveTo {
+            get {
+                return ResourceManager.GetString("SpecialIdentifierToSaveTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text To Save.
+        /// </summary>
+        public static string TextToSave {
+            get {
+                return ResourceManager.GetString("TextToSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string Type {
+            get {
+                return ResourceManager.GetString("Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update.
+        /// </summary>
+        public static string Update {
+            get {
+                return ResourceManager.GetString("Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wait For Finish:.
+        /// </summary>
+        public static string WaitForFinishHeader {
+            get {
+                return ResourceManager.GetString("WaitForFinishHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Whisper:.
+        /// </summary>
+        public static string WhisperHeader {
+            get {
+                return ResourceManager.GetString("WhisperHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Whisper User (Optional).
+        /// </summary>
+        public static string WhisperUserOptional {
+            get {
+                return ResourceManager.GetString("WhisperUserOptional", resourceCulture);
             }
         }
     }

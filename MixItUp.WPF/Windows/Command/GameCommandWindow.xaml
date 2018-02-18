@@ -279,7 +279,7 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Column="0">
-                        <Hyperlink NavigateUri="https://github.com/SaviorXTanren/mixer-mixitup/wiki/Special-Identifiers" RequestNavigate="Hyperlink_RequestNavigate">Special Identifiers Reference</Hyperlink>
+                        <Hyperlink NavigateUri="https://github.com/SaviorXTanren/mixer-mixitup/wiki/Special-Identifiers" RequestNavigate="Hyperlink_RequestNavigate"><TextBlock Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='SpecialIdentifiersReference'}" /></Hyperlink>
                     </TextBlock>
 
                     <TextBlock Grid.Column="2">

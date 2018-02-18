@@ -89,7 +89,7 @@
                 <TextBox Grid.Column="2" x:Name="OverlayFontColorTextBox" MaterialDesign:HintAssist.Hint="Color Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
                 <TextBlock Grid.Column="4">
-                            <Hyperlink NavigateUri="https://github.com/SaviorXTanren/mixer-mixitup/wiki/Special-Identifiers" RequestNavigate="Hyperlink_RequestNavigate">Special Identifiers Reference</Hyperlink>
+                    <Hyperlink NavigateUri="https://github.com/SaviorXTanren/mixer-mixitup/wiki/Special-Identifiers" RequestNavigate="Hyperlink_RequestNavigate"><TextBlock Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='SpecialIdentifiersReference'}" /></Hyperlink>
                 </TextBlock>
             </Grid>
 

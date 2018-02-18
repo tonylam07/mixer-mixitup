@@ -29,10 +29,6 @@
     </Windows:LoadingWindowBase.Resources>
 
     <Grid>
-        <Grid.Resources>
-            <Util:LocalizationConverter x:Key="LocalizationConverter" />
-        </Grid.Resources>
-        
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />

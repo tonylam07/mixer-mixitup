@@ -22,7 +22,7 @@
         <TextBlock Grid.Column="0" Grid.Row="0">(Letters &amp; Numbers Only, no $)</TextBlock>
 
         <TextBlock Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right">
-            <Hyperlink NavigateUri="https://github.com/SaviorXTanren/mixer-mixitup/wiki/Special-Identifiers" RequestNavigate="Hyperlink_RequestNavigate">Special Identifiers Reference</Hyperlink>
+            <Hyperlink NavigateUri="https://github.com/SaviorXTanren/mixer-mixitup/wiki/Special-Identifiers" RequestNavigate="Hyperlink_RequestNavigate"><TextBlock Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='SpecialIdentifiersReference'}" /></Hyperlink>
         </TextBlock>
 
         <TextBox Grid.Column="0" Grid.Row="2" x:Name="SpecialIdentifierNameTextBox" MaterialDesign:HintAssist.Hint="Special Identifier Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />

@@ -41,7 +41,10 @@ namespace MixItUp.Base.Localization
 
             if (string.IsNullOrEmpty(value))
             {
-                return LocalizationHandler.GetLocalizationString(MixItUp.Base.Localization.English.ResourceManager, key);
+                if (resourceManager != MixItUp.Base.Localization.English.ResourceManager)
+                {
+                    return LocalizationHandler.GetLocalizationString(MixItUp.Base.Localization.English.ResourceManager, key);
+                }
             }
             return value;
         }

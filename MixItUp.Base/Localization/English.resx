@@ -117,7 +117,91 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Action" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="ActionGroup" xml:space="preserve">
+    <value>Action Group</value>
+  </data>
+  <data name="AmountPlusMinus" xml:space="preserve">
+    <value>Amount (+/-)</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="ChatMessage" xml:space="preserve">
+    <value>Chat Message</value>
+  </data>
+  <data name="CounterName" xml:space="preserve">
+    <value>Counter Name (No $)</value>
+  </data>
+  <data name="CrashOccurredMessage" xml:space="preserve">
+    <value>Whoops! Looks like we ran into an issue and we'll have to close the program. Would you like to submit a bug to help us improve Mix It Up?</value>
+  </data>
+  <data name="CurrencyRankType" xml:space="preserve">
+    <value>Currency/Rank Type</value>
+  </data>
+  <data name="FilePath" xml:space="preserve">
+    <value>File Path</value>
+  </data>
+  <data name="GameQueueAction" xml:space="preserve">
+    <value>Game Queue Action</value>
+  </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
+  </data>
+  <data name="MessageBoxCrash" xml:space="preserve">
+    <value>Mix It Up - Crash</value>
+  </data>
+  <data name="ProgramArguments" xml:space="preserve">
+    <value>Program Arguments</value>
+  </data>
+  <data name="ProgramFilePath" xml:space="preserve">
+    <value>Program File Path</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="ResetOnLoadHeader" xml:space="preserve">
+    <value>Reset On Load:</value>
+  </data>
+  <data name="SaveToFileHeader" xml:space="preserve">
+    <value>Save To File:</value>
+  </data>
+  <data name="SendAsStreamerHeader" xml:space="preserve">
+    <value>Send As Streamer:</value>
+  </data>
+  <data name="ShowWindowHeader" xml:space="preserve">
+    <value>Show Window:</value>
+  </data>
+  <data name="SpecialIdentifierName" xml:space="preserve">
+    <value>Special Identifier Name (Only Letters &amp;amp; Numbers Allowed, no $)</value>
+  </data>
+  <data name="SpecialIdentifierNameHeader" xml:space="preserve">
+    <value>Special Identifier Name (Only Letters &amp;amp; Numbers Allowed, no $):</value>
+  </data>
+  <data name="SpecialIdentifiersReference" xml:space="preserve">
+    <value>Special Identifiers Reference</value>
+  </data>
+  <data name="SpecialIdentifierToSaveTo" xml:space="preserve">
+    <value>Special Identifier To Save To</value>
+  </data>
+  <data name="TextToSave" xml:space="preserve">
+    <value>Text To Save</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="WaitForFinishHeader" xml:space="preserve">
+    <value>Wait For Finish:</value>
+  </data>
+  <data name="WhisperHeader" xml:space="preserve">
+    <value>Whisper:</value>
+  </data>
+  <data name="WhisperUserOptional" xml:space="preserve">
+    <value>Whisper User (Optional)</value>
   </data>
 </root>

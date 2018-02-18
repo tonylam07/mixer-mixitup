@@ -1,4 +1,5 @@
 ﻿using MixItUp.Base.Actions;
+using MixItUp.Base.Localization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace MixItUp.WPF.Controls.Actions
 
         public override Task OnLoaded()
         {
-            this.CounterActionTypeComboBox.ItemsSource = new List<string>() { "Update", "Reset" };
+            this.CounterActionTypeComboBox.ItemsSource = new List<string>() { LocalizationHandler.GetLocalizationString("Update"), LocalizationHandler.GetLocalizationString("Reset") };
 
             if (this.action != null)
             {

@@ -39,19 +39,19 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" VerticalAlignment="Center">Send As Streamer:</TextBlock>
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='SendAsStreamerHeader'}" />
             <ToggleButton Grid.Column="2" x:Name="ChatSendAsStreamerToggleButton" />
 
-            <TextBlock Grid.Column="4" VerticalAlignment="Center">Whisper:</TextBlock>
+            <TextBlock Grid.Column="4" VerticalAlignment="Center" Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='WhisperHeader'}" />
             <ToggleButton Grid.Column="6" x:Name="ChatWhisperToggleButton" Checked="ChatWhisperToggleButton_Checked" Unchecked="ChatWhisperToggleButton_Checked" />
 
-            <TextBox Grid.Column="8" x:Name="ChatWhisperUserNameTextBox" IsEnabled="False" MaterialDesign:HintAssist.Hint="Whisper User (Optional)" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Width="150" />
+            <TextBox Grid.Column="8" x:Name="ChatWhisperUserNameTextBox" IsEnabled="False" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='WhisperUserOptional'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Width="150" />
 
             <TextBlock Grid.Column="10" VerticalAlignment="Center">
-                <Hyperlink NavigateUri="https://github.com/SaviorXTanren/mixer-mixitup/wiki/Special-Identifiers" RequestNavigate="Hyperlink_RequestNavigate">Special Identifiers Reference</Hyperlink>
+                <Hyperlink NavigateUri="https://github.com/SaviorXTanren/mixer-mixitup/wiki/Special-Identifiers" RequestNavigate="Hyperlink_RequestNavigate"><TextBlock Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='SpecialIdentifiersReference'}" /></Hyperlink>
             </TextBlock>
         </Grid>
 
-        <TextBox Grid.Row="2" x:Name="ChatMessageTextBox" MaterialDesign:HintAssist.Hint="Chat Message" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+        <TextBox Grid.Row="2" x:Name="ChatMessageTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='ChatMessage'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
     </Grid>
 </local:ActionControlBase>

@@ -97,7 +97,7 @@ namespace MixItUp.WPF
                 Logger.Log("CRASH OCCURRED! CRASH EXCEPTION BELOW:");
                 Logger.Log(ex);
 
-                if (MessageBox.Show("Whoops! Looks like we ran into an issue and we'll have to close the program. Would you like to submit a bug to help us improve Mix It Up?", "Mix It Up - Crash", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if (MessageBox.Show(LocalizationHandler.GetLocalizationString("CrashOccurredMessage"), LocalizationHandler.GetLocalizationString("MessageBoxCrash"), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     Process.Start("https://github.com/SaviorXTanren/mixer-mixitup/issues");
                 }
