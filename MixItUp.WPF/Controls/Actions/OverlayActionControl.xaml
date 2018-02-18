@@ -24,9 +24,9 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <ComboBox x:Name="OverlayTypeComboBox" Grid.Column="0" SelectionChanged="OverlayTypeComboBox_SelectionChanged" MaterialDesign:HintAssist.Hint="Type" Style="{StaticResource BackgroundComboBox}" />
+            <ComboBox x:Name="OverlayTypeComboBox" Grid.Column="0" SelectionChanged="OverlayTypeComboBox_SelectionChanged" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='Type'}" Style="{StaticResource BackgroundComboBox}" />
 
-            <TextBlock x:Name="OverlayNotEnabledWarningTextBlock" Grid.Column="2" Foreground="Red" Visibility="Hidden">Please enable Mix It Up Overlay in the Services Section!</TextBlock>
+            <TextBlock x:Name="OverlayNotEnabledWarningTextBlock" Grid.Column="2" Foreground="Red" Visibility="Hidden" Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='PleaseEnableMixItUpOverlay'}" />
         </Grid>
 
         <Grid Grid.Row="2" x:Name="OverlayImageGrid" Visibility="Collapsed">
@@ -50,8 +50,8 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBox Grid.Column="0" x:Name="OverlayImageFilePathTextBox" MaterialDesign:HintAssist.Hint="Image File Path" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                    <Button Grid.Column="2" x:Name="OverlayImageFileBrowseButton" Click="OverlayImageFileBrowseButton_Click">Browse</Button>
+                    <TextBox Grid.Column="0" x:Name="OverlayImageFilePathTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='ImageFilePath'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    <Button Grid.Column="2" x:Name="OverlayImageFileBrowseButton" Click="OverlayImageFileBrowseButton_Click" Content="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='Browse'}" />
                 </Grid>
 
                 <Grid Grid.Row="2">
@@ -61,9 +61,9 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBox Grid.Column="0" x:Name="OverlayImageWidthTextBox" MaterialDesign:HintAssist.Hint="Width (Pixels)" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    <TextBox Grid.Column="0" x:Name="OverlayImageWidthTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='WidthPixels'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
-                    <TextBox Grid.Column="2" x:Name="OverlayImageHeightTextBox" MaterialDesign:HintAssist.Hint="Height (Pixels)" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    <TextBox Grid.Column="2" x:Name="OverlayImageHeightTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='HeightPixels'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
                 </Grid>
             </Grid>
         </Grid>
@@ -84,16 +84,16 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <TextBox Grid.Column="0" x:Name="OverlayFontSizeTextBox" MaterialDesign:HintAssist.Hint="Font Size (Pixels)" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                <TextBox Grid.Column="0" x:Name="OverlayFontSizeTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='FontSizePixels'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
-                <TextBox Grid.Column="2" x:Name="OverlayFontColorTextBox" MaterialDesign:HintAssist.Hint="Color Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                <TextBox Grid.Column="2" x:Name="OverlayFontColorTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='ColorName'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
                 <TextBlock Grid.Column="4">
                     <Hyperlink NavigateUri="https://github.com/SaviorXTanren/mixer-mixitup/wiki/Special-Identifiers" RequestNavigate="Hyperlink_RequestNavigate"><TextBlock Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='SpecialIdentifiersReference'}" /></Hyperlink>
                 </TextBlock>
             </Grid>
 
-            <TextBox Grid.Row="2" x:Name="OverlayTextTextBox" MaterialDesign:HintAssist.Hint="Text" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <TextBox Grid.Row="2" x:Name="OverlayTextTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='Text'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
         </Grid>
 
         <Grid Grid.Row="2" x:Name="OverlayYoutubeVideoGrid" Visibility="Collapsed">
@@ -103,9 +103,9 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="OverlayYoutubeVideoIDTextBox" Grid.Column="0" MaterialDesign:HintAssist.Hint="Youtube Video URL/ID" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <TextBox x:Name="OverlayYoutubeVideoIDTextBox" Grid.Column="0" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='YoutubeVideoUrlID'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
-            <TextBox x:Name="OverlayYoutubeStartTimeTextBox" Grid.Column="2" MaterialDesign:HintAssist.Hint="Start Time (Seconds)" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <TextBox x:Name="OverlayYoutubeStartTimeTextBox" Grid.Column="2" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='StartTimeSeconds'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
         </Grid>
 
         <Grid Grid.Row="2" x:Name="OverlayHTMLGrid" Visibility="Collapsed">
@@ -113,7 +113,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <TextBox x:Name="OverlayHTMLTextBox" MaterialDesign:HintAssist.Hint="HTML Text" Style="{StaticResource MultiLineTextBox}" Height="150" />
+            <TextBox x:Name="OverlayHTMLTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='HTMLText'}" Style="{StaticResource MultiLineTextBox}" Height="150" />
         </Grid>
 
         <Grid Grid.Row="4" x:Name="OverlayPositionGrid" Visibility="Collapsed">
@@ -127,9 +127,9 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBox Grid.Column="0" x:Name="OverlayDurationTextBox" MaterialDesign:HintAssist.Hint="Duration (Sec)" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Width="100" />
+            <TextBox Grid.Column="0" x:Name="OverlayDurationTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='DurationSeconds'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Width="100" />
 
-            <ComboBox Grid.Column="2" x:Name="OverlayFadeEffectComboBox" MaterialDesign:HintAssist.Hint="Fade Effect" Width="100" Style="{StaticResource BackgroundComboBox}" />
+            <ComboBox Grid.Column="2" x:Name="OverlayFadeEffectComboBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='FadeEffect'}" Width="100" Style="{StaticResource BackgroundComboBox}" />
 
             <Controls:SliderWithHeaderControl Grid.Column="4" x:Name="OverlayHorizontalSlider" Grid.Row="0" Minimum="0" Maximum="100" Text="Position % From Left:" />
 

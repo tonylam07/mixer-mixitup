@@ -32,12 +32,12 @@
             <Hyperlink NavigateUri="https://github.com/SaviorXTanren/mixer-mixitup/wiki/Special-Identifiers" RequestNavigate="Hyperlink_RequestNavigate"><TextBlock Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='SpecialIdentifiersReference'}" /></Hyperlink>
         </TextBlock>
 
-        <TextBox Grid.Row="2" x:Name="WebRequestURLTextBox" MaterialDesign:HintAssist.Hint="Web Request URL" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+        <TextBox Grid.Row="2" x:Name="WebRequestURLTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='WebRequestURL'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
-        <ComboBox Grid.Row="4" x:Name="ResponseActionComboBox" MaterialDesign:HintAssist.Hint="Action To Perform With Response" Style="{StaticResource BackgroundComboBox}" SelectionChanged="ResponseActionComboBox_SelectionChanged" />
+        <ComboBox Grid.Row="4" x:Name="ResponseActionComboBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='ActionToPerformWithResponse'}" Style="{StaticResource BackgroundComboBox}" SelectionChanged="ResponseActionComboBox_SelectionChanged" />
 
         <Grid x:Name="ChatResponseActionGrid" Grid.Row="6" Visibility="Collapsed">
-            <TextBox x:Name="ChatResponseTextBox" MaterialDesign:HintAssist.Hint="Chat Message ($webrequestresult = Result Text)" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <TextBox x:Name="ChatResponseTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='ChatMessageWithWebRequestResult'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
         </Grid>
 
         <Grid x:Name="CommandResponseActionGrid" Grid.Row="6" Visibility="Collapsed">
@@ -47,13 +47,13 @@
                 <ColumnDefinition Width="2*" />
             </Grid.ColumnDefinitions>
 
-            <ComboBox x:Name="CommandResponseComboBox" Grid.Column="0" MaterialDesign:HintAssist.Hint="Chat Command" Style="{StaticResource BackgroundComboBox}" />
+            <ComboBox x:Name="CommandResponseComboBox" Grid.Column="0" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='ChatCommand'}" Style="{StaticResource BackgroundComboBox}" />
 
-            <TextBox x:Name="CommandResponseArgumentsTextBox" Grid.Column="2" MaterialDesign:HintAssist.Hint="Arguments ($webrequestresult = Result Text)" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <TextBox x:Name="CommandResponseArgumentsTextBox" Grid.Column="2" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='ArgumentsWithWebRequestResult'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
         </Grid>
 
         <Grid x:Name="SpecialIdentifierResponseActionGrid" Grid.Row="6" Visibility="Collapsed">
-            <TextBox x:Name="SpecialIdentifierResponseTextBox" MaterialDesign:HintAssist.Hint="Special Identifier Name (Letters &amp; Numbers Only, no $)" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <TextBox x:Name="SpecialIdentifierResponseTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='SpecialIdentifierNameWithRestrictionsHeader'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
         </Grid>
 
     </Grid>

@@ -27,7 +27,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='SpecialIdentifierNameHeader'}" />
+            <TextBlock Grid.Column="0" Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='SpecialIdentifierNameWithRestrictionsHeader'}" />
 
             <TextBlock Grid.Column="2" Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='SaveToFileHeader'}" />
             <ToggleButton Grid.Column="4" x:Name="SaveToFileToggleButton" Checked="SaveToFileToggleButton_Checked" Unchecked="SaveToFileToggleButton_Checked" />

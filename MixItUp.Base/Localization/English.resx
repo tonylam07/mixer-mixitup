@@ -174,10 +174,7 @@
   <data name="ShowWindowHeader" xml:space="preserve">
     <value>Show Window:</value>
   </data>
-  <data name="SpecialIdentifierName" xml:space="preserve">
-    <value>Special Identifier Name (Only Letters &amp;amp; Numbers Allowed, no $)</value>
-  </data>
-  <data name="SpecialIdentifierNameHeader" xml:space="preserve">
+  <data name="SpecialIdentifierNameWithRestrictionsHeader" xml:space="preserve">
     <value>Special Identifier Name (Only Letters &amp;amp; Numbers Allowed, no $):</value>
   </data>
   <data name="SpecialIdentifiersReference" xml:space="preserve">
@@ -203,5 +200,149 @@
   </data>
   <data name="WhisperUserOptional" xml:space="preserve">
     <value>Whisper User (Optional)</value>
+  </data>
+  <data name="ClickRecordKeysButtonHeader" xml:space="preserve">
+    <value>Click the "Record Keys" button and hold all keys you wish to use:</value>
+  </data>
+  <data name="CollectionNameOptional" xml:space="preserve">
+    <value>Collection Name (Optional)</value>
+  </data>
+  <data name="ColorName" xml:space="preserve">
+    <value>Color Name</value>
+  </data>
+  <data name="CooldownAmounts" xml:space="preserve">
+    <value>Cooldown Amount (Seconds)</value>
+  </data>
+  <data name="CouldNotConnectToOBSStudio" xml:space="preserve">
+    <value>Could not connect to OBS Studio. Please try establishing connection with it in the Services area.</value>
+  </data>
+  <data name="DurationSeconds" xml:space="preserve">
+    <value>Duration (Seconds)</value>
+  </data>
+  <data name="FadeEffect" xml:space="preserve">
+    <value>Fade Effect</value>
+  </data>
+  <data name="FileHeader" xml:space="preserve">
+    <value>File:</value>
+  </data>
+  <data name="FontSizePixels" xml:space="preserve">
+    <value>Font Size (Pixels)</value>
+  </data>
+  <data name="GetCurrent" xml:space="preserve">
+    <value>Get Current</value>
+  </data>
+  <data name="GroupNameCaseSensitive" xml:space="preserve">
+    <value>Group Name (Case Sensitive)</value>
+  </data>
+  <data name="HeightPixels" xml:space="preserve">
+    <value>Height (Pixels)</value>
+  </data>
+  <data name="HTMLText" xml:space="preserve">
+    <value>HTML Text</value>
+  </data>
+  <data name="ImageFilePath" xml:space="preserve">
+    <value>Image File Path</value>
+  </data>
+  <data name="LettersNumbersOnlyNoDollarSign" xml:space="preserve">
+    <value>(Letters &amp;amp; Numbers Only, no $)</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Permissions" xml:space="preserve">
+    <value>Permissions</value>
+  </data>
+  <data name="PleaseEnableMixItUpOverlay" xml:space="preserve">
+    <value>Please enable Mix It Up Overlay in the Services Section!</value>
+  </data>
+  <data name="PleaseEnableOBSStudioConnection" xml:space="preserve">
+    <value>Please enable OBS Studio connection in the Services Section!</value>
+  </data>
+  <data name="RecordedKeysHeader" xml:space="preserve">
+    <value>Recorded Keys:</value>
+  </data>
+  <data name="RecordKeys" xml:space="preserve">
+    <value>Record Keys</value>
+  </data>
+  <data name="ReplacementText" xml:space="preserve">
+    <value>Replacement Text</value>
+  </data>
+  <data name="RotationDegrees" xml:space="preserve">
+    <value>Rotation (Degrees)</value>
+  </data>
+  <data name="SceneName" xml:space="preserve">
+    <value>Scene Name</value>
+  </data>
+  <data name="SceneNameCaseSensitive" xml:space="preserve">
+    <value>Scene Name (Case Sensitive)</value>
+  </data>
+  <data name="SoundFilePath" xml:space="preserve">
+    <value>Sound File Path</value>
+  </data>
+  <data name="SourceText" xml:space="preserve">
+    <value>Source Text</value>
+  </data>
+  <data name="SpecialIdentifierName" xml:space="preserve">
+    <value>Special Identifier Name</value>
+  </data>
+  <data name="SpeechMessage" xml:space="preserve">
+    <value>Speech Message</value>
+  </data>
+  <data name="SpeechRate" xml:space="preserve">
+    <value>Speech Rate</value>
+  </data>
+  <data name="SpeechVolume" xml:space="preserve">
+    <value>Speech Volume</value>
+  </data>
+  <data name="StartTimeSeconds" xml:space="preserve">
+    <value>Start Time (Seconds)</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="VisibleHeader" xml:space="preserve">
+    <value>Visible:</value>
+  </data>
+  <data name="VolumeHeader" xml:space="preserve">
+    <value>Volume:</value>
+  </data>
+  <data name="WebPageUrlOrLocalFile" xml:space="preserve">
+    <value>Web Page (URL or Local File)</value>
+  </data>
+  <data name="WidthPixels" xml:space="preserve">
+    <value>Width (Pixels)</value>
+  </data>
+  <data name="XPosition" xml:space="preserve">
+    <value>X Position</value>
+  </data>
+  <data name="XScaleDecimal" xml:space="preserve">
+    <value>X Scale (Decimal)</value>
+  </data>
+  <data name="YoutubeVideoUrlID" xml:space="preserve">
+    <value>Youtube Video URL/ID</value>
+  </data>
+  <data name="YPosition" xml:space="preserve">
+    <value>Y Position</value>
+  </data>
+  <data name="YScaleDecimal" xml:space="preserve">
+    <value>Y Scale (Decimal)</value>
+  </data>
+  <data name="ActionToPerformWithResponse" xml:space="preserve">
+    <value>Action To Perform With Response</value>
+  </data>
+  <data name="ArgumentsWithWebRequestResult" xml:space="preserve">
+    <value>Arguments ($webrequestresult = Result Text)</value>
+  </data>
+  <data name="ChatCommand" xml:space="preserve">
+    <value>Chat Command</value>
+  </data>
+  <data name="ChatMessageWithWebRequestResult" xml:space="preserve">
+    <value>Chat Message ($webrequestresult = Result Text)</value>
+  </data>
+  <data name="PleaseEnableXSplitConnection" xml:space="preserve">
+    <value>Please enable XSplit connection in the Services Section!</value>
+  </data>
+  <data name="WebRequestURL" xml:space="preserve">
+    <value>Web Request URL</value>
   </data>
 </root>

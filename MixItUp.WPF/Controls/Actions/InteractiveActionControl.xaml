@@ -21,7 +21,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <ComboBox x:Name="InteractiveTypeComboBox" Grid.Column="0" SelectionChanged="InteractiveTypeComboBox_SelectionChanged" MaterialDesign:HintAssist.Hint="Type" Style="{StaticResource BackgroundComboBox}" />
+            <ComboBox x:Name="InteractiveTypeComboBox" Grid.Column="0" SelectionChanged="InteractiveTypeComboBox_SelectionChanged" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='Type'}" Style="{StaticResource BackgroundComboBox}" />
         </Grid>
 
         <Grid Grid.Row="2" x:Name="InteractiveMoveUserToGroupGrid" Visibility="Hidden">
@@ -31,9 +31,9 @@
                 <ColumnDefinition Width="120" />
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="InteractiveMoveUserToGroupGroupNameTextBox" Grid.Column="0" MaterialDesign:HintAssist.Hint="Group Name (Case Sensitive)" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <TextBox x:Name="InteractiveMoveUserToGroupGroupNameTextBox" Grid.Column="0" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='GroupNameCaseSensitive'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
-            <ComboBox x:Name="InteractiveMoveUserToGroupPermissionsAllowedComboBox" Grid.Column="2" MaterialDesign:HintAssist.Hint="Permissions" Style="{StaticResource BackgroundComboBox}" />
+            <ComboBox x:Name="InteractiveMoveUserToGroupPermissionsAllowedComboBox" Grid.Column="2" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='Permissions'}" Style="{StaticResource BackgroundComboBox}" />
         </Grid>
 
         <Grid Grid.Row="2" x:Name="InteractiveMoveGroupToSceneGrid" Visibility="Hidden">
@@ -43,9 +43,9 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="InteractiveMoveGroupToSceneGroupNameTextBox" Grid.Column="0" MaterialDesign:HintAssist.Hint="Group Name (Case Sensitive)" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <TextBox x:Name="InteractiveMoveGroupToSceneGroupNameTextBox" Grid.Column="0" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='GroupNameCaseSensitive'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
-            <TextBox x:Name="InteractiveMoveGroupToSceneSceneIDTextBox" Grid.Column="2" MaterialDesign:HintAssist.Hint="Scene Name (Case Sensitive)" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <TextBox x:Name="InteractiveMoveGroupToSceneSceneIDTextBox" Grid.Column="2" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='SceneNameCaseSensitive'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
         </Grid>
 
         <Grid Grid.Row="2" x:Name="InteractiveMoveUserToSceneGrid" Visibility="Hidden">
@@ -55,9 +55,9 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <ComboBox x:Name="InteractiveMoveUserToScenePermissionsAllowedComboBox" Grid.Column="0" MaterialDesign:HintAssist.Hint="Permissions" Style="{StaticResource BackgroundComboBox}" />
+            <ComboBox x:Name="InteractiveMoveUserToScenePermissionsAllowedComboBox" Grid.Column="0" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='Permissions'}" Style="{StaticResource BackgroundComboBox}" />
 
-            <TextBox x:Name="InteractiveMoveUserToSceneSceneIDTextBox" Grid.Column="2" MaterialDesign:HintAssist.Hint="Scene Name (Case Sensitive)" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <TextBox x:Name="InteractiveMoveUserToSceneSceneIDTextBox" Grid.Column="2" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='SceneNameCaseSensitive'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
         </Grid>
 
         <Grid Grid.Row="2" x:Name="InteractiveCooldownGrid" Visibility="Hidden">
@@ -67,9 +67,9 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="InteractiveCooldownNameTextBox" Grid.Column="0" MaterialDesign:HintAssist.Hint="Name" />
+            <TextBox x:Name="InteractiveCooldownNameTextBox" Grid.Column="0" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='Name'}" />
 
-            <TextBox x:Name="InteractiveCooldownAmountTextBox" Grid.Column="2" MaterialDesign:HintAssist.Hint="Cooldown Amount" />
+            <TextBox x:Name="InteractiveCooldownAmountTextBox" Grid.Column="2" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='CooldownAmount'}" />
         </Grid>
 
     </Grid>

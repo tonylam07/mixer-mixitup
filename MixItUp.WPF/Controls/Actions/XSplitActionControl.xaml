@@ -21,13 +21,13 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <ComboBox x:Name="XSplitTypeComboBox" Grid.Column="0" SelectionChanged="XSplitTypeComboBox_SelectionChanged" MaterialDesign:HintAssist.Hint="Type" Style="{StaticResource BackgroundComboBox}" />
+            <ComboBox x:Name="XSplitTypeComboBox" Grid.Column="0" SelectionChanged="XSplitTypeComboBox_SelectionChanged" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='Type'}" Style="{StaticResource BackgroundComboBox}" />
 
-            <TextBlock x:Name="XSplitNotEnabledWarningTextBlock" Grid.Column="2" Foreground="Red" Visibility="Hidden">Please enable XSplit connection in the Services Section!</TextBlock>
+            <TextBlock x:Name="XSplitNotEnabledWarningTextBlock" Grid.Column="2" Foreground="Red" Visibility="Hidden" Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='PleaseEnableXSplitConnection'}" />
         </Grid>
 
         <Grid x:Name="XSplitSceneGrid" Grid.Row="2" Visibility="Hidden" VerticalAlignment="Top">
-            <TextBox x:Name="XSplitSceneNameTextBox" MaterialDesign:HintAssist.Hint="Scene Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <TextBox x:Name="XSplitSceneNameTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='SceneName'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
         </Grid>
 
         <Grid x:Name="XSplitSourceGrid" Grid.Row="2" Visibility="Hidden">
@@ -46,9 +46,9 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <TextBox Grid.Column="0" Grid.Row="0" x:Name="XSplitSourceNameTextBox" MaterialDesign:HintAssist.Hint="Source Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                <TextBox Grid.Column="0" Grid.Row="0" x:Name="XSplitSourceNameTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='SourceName'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
-                <TextBlock Grid.Column="2" VerticalAlignment="Center">Visible:</TextBlock>
+                <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='VisibleHeader'}" />
                 <CheckBox Grid.Column="4" x:Name="XSplitSourceVisibleCheckBox" />
             </Grid>
 
@@ -59,7 +59,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <TextBox Grid.Row="0" x:Name="XSplitSourceTextTextBox" MaterialDesign:HintAssist.Hint="Source Text" TextChanged="XSplitSourceTextTextBox_TextChanged" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                <TextBox Grid.Row="0" x:Name="XSplitSourceTextTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='SourceText'}" TextChanged="XSplitSourceTextTextBox_TextChanged" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
@@ -68,7 +68,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0">File:</TextBlock>
+                    <TextBlock Grid.Column="0" Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='FileHeader'}" />
 
                     <TextBox Grid.Column="2" x:Name="XSplitSourceLoadTextFromTextBox" IsReadOnly="True" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
                 </Grid>
@@ -81,9 +81,9 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <TextBox Grid.Column="0" x:Name="XSplitSourceWebPageTextBox" MaterialDesign:HintAssist.Hint="Web Page (URL or Local File)" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                <TextBox Grid.Column="0" x:Name="XSplitSourceWebPageTextBox" MaterialDesign:HintAssist.Hint="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='WebPageUrlOrLocalFile'}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
-                <Button Grid.Column="2" x:Name="XSplitSourceWebPageBrowseButton" Click="XSplitSourceWebPageBrowseButton_Click">Browse</Button>
+                <Button Grid.Column="2" x:Name="XSplitSourceWebPageBrowseButton" Click="XSplitSourceWebPageBrowseButton_Click" Content="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='Browse'}" />
 
             </Grid>
 

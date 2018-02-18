@@ -1,6 +1,7 @@
 ﻿using Mixer.Base.Util;
 using MixItUp.Base;
 using MixItUp.Base.Actions;
+using MixItUp.Base.Localization;
 using MixItUp.Base.Services;
 using MixItUp.WPF.Util;
 using System.IO;
@@ -196,7 +197,7 @@ namespace MixItUp.WPF.Controls.Actions
                     }
                     else
                     {
-                        await MessageBoxHelper.ShowMessageDialog("Could not connect to OBS Studio. Please try establishing connection with it in the Services area.");
+                        await MessageBoxHelper.ShowMessageDialog(LocalizationHandler.GetLocalizationString("CouldNotConnectToOBSStudio"));
                     }
                 });
             }

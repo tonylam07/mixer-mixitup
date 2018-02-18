@@ -14,7 +14,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0">Click the "Record Keys" button and hold all keys you wish to use:</TextBlock>
+        <TextBlock Grid.Row="0" Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='ClickRecordKeysButtonHeader'}" />
 
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
@@ -25,11 +25,11 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Style="{StaticResource HeaderTextBlock}" VerticalAlignment="Center">Recorded Keys:</TextBlock>
+            <TextBlock Grid.Column="0" Style="{StaticResource HeaderTextBlock}" VerticalAlignment="Center" Text="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='RecordedKeysHeader'}" />
 
             <TextBlock Grid.Column="2" x:Name="RecordedKeysTextBlock" TextWrapping="Wrap" VerticalAlignment="Center" />
 
-            <Button Grid.Column="4" x:Name="RecordKeysButton" Width="110" Click="RecordKeysButton_Click">Record Keys</Button>
+            <Button Grid.Column="4" x:Name="RecordKeysButton" Width="110" Click="RecordKeysButton_Click" Content="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='RecordKeys'}" />
         </Grid>
 
     </Grid>
