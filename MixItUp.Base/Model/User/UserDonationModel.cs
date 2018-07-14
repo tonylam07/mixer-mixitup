@@ -9,6 +9,7 @@ namespace MixItUp.Base.Model.User
         GawkBox,
         Streamlabs,
         Tiltify,
+        TipeeeStream,
     }
 
     [DataContract]

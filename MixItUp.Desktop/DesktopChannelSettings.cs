@@ -64,6 +64,8 @@ namespace MixItUp.Desktop
         public OAuthTokenModel DiscordOAuthToken { get; set; }
         [JsonProperty]
         public OAuthTokenModel TiltifyOAuthToken { get; set; }
+        [JsonProperty]
+        public OAuthTokenModel TipeeeStreamOAuthToken { get; set; }
 
         [JsonProperty]
         public ExpandedChannelModel Channel { get; set; }
@@ -489,6 +491,10 @@ namespace MixItUp.Desktop
             if (ChannelSession.Services.Tiltify != null)
             {
                 this.TiltifyOAuthToken = ChannelSession.Services.Tiltify.GetOAuthTokenCopy();
+            }
+            if (ChannelSession.Services.TipeeeStream != null)
+            {
+                this.TipeeeStreamOAuthToken = ChannelSession.Services.TipeeeStream.GetOAuthTokenCopy();
             }
 
             this.currenciesInternal = this.Currencies.ToDictionary();

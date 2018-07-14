@@ -9,7 +9,6 @@ using MixItUp.Base.ViewModel.User;
 using MixItUp.Desktop.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Quobject.SocketIoClientDotNet.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -261,11 +260,15 @@ namespace MixItUp.Desktop.Services
             return false;
         }
 
-        public Task Disconnect()
+        public async Task Disconnect()
         {
             this.token = null;
             this.cancellationTokenSource.Cancel();
-            return Task.FromResult(0);
+            if (this.socket != null)
+            {
+                await this.socket.Disconnect();
+                this.socket = null;
+            }
         }
 
         public async Task<GameWispChannelInformation> GetChannelInformation()
