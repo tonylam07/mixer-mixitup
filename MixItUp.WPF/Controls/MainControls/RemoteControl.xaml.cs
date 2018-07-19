@@ -1,9 +1,8 @@
 ﻿using MixItUp.Base;
 using MixItUp.Base.Commands;
 using MixItUp.Base.Model.Remote;
-using MixItUp.Desktop.Services;
+using MixItUp.Base.Services;
 using MixItUp.WPF.Controls.Command;
-using MixItUp.WPF.Controls.Dialogs;
 using MixItUp.WPF.Util;
 using MixItUp.WPF.Windows.Command;
 using System;
@@ -21,14 +20,8 @@ namespace MixItUp.WPF.Controls.MainControls
     public partial class RemoteControl : MainControlBase
     {
         public RemoteBoardModel CurrentBoard { get; private set; }
-        public RemoteBoardGroupModel CurrentGroup { get; private set; }
-        public RemoteCommand CurrentlySelectedCommand { get; set; }
 
-        private ObservableCollection<RemoteCommand> remoteCommands = new ObservableCollection<RemoteCommand>();
         private ObservableCollection<RemoteBoardModel> boards = new ObservableCollection<RemoteBoardModel>();
-        private ObservableCollection<RemoteBoardGroupModel> groups = new ObservableCollection<RemoteBoardGroupModel>();
-
-        private RemoteService remoteService;
 
         public RemoteControl()
         {
@@ -37,135 +30,64 @@ namespace MixItUp.WPF.Controls.MainControls
 
         protected override Task InitializeInternal()
         {
-            this.RemoteCommandsListView.ItemsSource = this.remoteCommands;
+            foreach (RemoteBoardModel board in ChannelSession.Settings.RemoteBoards)
+            {
+                foreach (RemoteBoardItemModel item in board.Items.Where(i => i.Command == null).ToList())
+                {
+                    board.Items.Remove(item);
+                }
+
+                foreach (RemoteBoardItemModel item in board.Items)
+                {
+                    item.SetValuesFromCommand();
+                }
+            }
+
             this.BoardNameComboBox.ItemsSource = this.boards;
-            this.GroupNameComboBox.ItemsSource = this.groups;
 
             this.Button00.Initialize(this, 0, 0);
             this.Button10.Initialize(this, 1, 0);
             this.Button20.Initialize(this, 2, 0);
             this.Button30.Initialize(this, 3, 0);
+            this.Button40.Initialize(this, 4, 0);
             this.Button01.Initialize(this, 0, 1);
             this.Button11.Initialize(this, 1, 1);
             this.Button21.Initialize(this, 2, 1);
             this.Button31.Initialize(this, 3, 1);
-
-            this.RefreshCommandsList();
+            this.Button41.Initialize(this, 4, 1);
+            this.Button02.Initialize(this, 0, 2);
+            this.Button12.Initialize(this, 1, 2);
+            this.Button22.Initialize(this, 2, 2);
+            this.Button32.Initialize(this, 3, 2);
+            this.Button42.Initialize(this, 4, 2);
 
             this.RefreshBoardsView();
 
             return base.InitializeInternal();
         }
 
-        private void RefreshCommandsList()
+        public void RefreshBoardsView()
         {
-            this.RemoteCommandsListView.SelectedIndex = -1;
-
-            this.remoteCommands.Clear();
-            foreach (RemoteCommand command in ChannelSession.Settings.RemoteCommands.OrderBy(c => c.Name))
-            {
-                this.remoteCommands.Add(command);
-            }
-        }
-
-        public void ResetListSelectedIndex()
-        {
-            this.RemoteCommandsListView.SelectedIndex = -1;
-        }
-
-        private void CommandButtons_EditClicked(object sender, RoutedEventArgs e)
-        {
-            CommandButtonsControl commandButtonsControl = (CommandButtonsControl)sender;
-            RemoteCommand command = commandButtonsControl.GetCommandFromCommandButtons<RemoteCommand>(sender);
-            if (command != null)
-            {
-                CommandWindow window = new CommandWindow(new RemoteCommandDetailsControl(command));
-                window.Closed += Window_Closed;
-                window.Show();
-            }
-        }
-
-        private async void CommandButtons_DeleteClicked(object sender, RoutedEventArgs e)
-        {
-            await this.Window.RunAsyncOperation(async () =>
-            {
-                CommandButtonsControl commandButtonsControl = (CommandButtonsControl)sender;
-                RemoteCommand command = commandButtonsControl.GetCommandFromCommandButtons<RemoteCommand>(sender);
-                if (command != null)
-                {
-                    ChannelSession.Settings.RemoteCommands.Remove(command);
-                    await ChannelSession.SaveSettings();
-
-                    this.RefreshCommandsList();
-                    this.UpdateRemoteItemsAndBoard();
-                }
-            });
-        }
-
-        private void AddCommandButton_Click(object sender, RoutedEventArgs e)
-        {
-            CommandWindow window = new CommandWindow(new RemoteCommandDetailsControl());
-            window.Closed += Window_Closed;
-            window.Show();
-        }
-
-        private async void AddReferenceCommandButton_Click(object sender, RoutedEventArgs e)
-        {
-            await this.Window.RunAsyncOperation(async () =>
-            {
-                RemoteReferenceCommandDialogControl dialogControl = new RemoteReferenceCommandDialogControl();
-                string result = await MessageBoxHelper.ShowCustomDialog(dialogControl);
-                if (!string.IsNullOrEmpty(result) && result.Equals("Save") && dialogControl.ReferenceCommand != null)
-                {
-                    ChannelSession.Settings.RemoteCommands.Add(new RemoteCommand(dialogControl.ReferenceCommand.Name, dialogControl.ReferenceCommand));
-                    await ChannelSession.SaveSettings();
-
-                    this.RefreshCommandsList();
-                    this.UpdateRemoteItemsAndBoard();
-                }
-            });
-        }
-
-        private void UpdateRemoteItemsAndBoard()
-        {
+            this.boards.Clear();
             foreach (RemoteBoardModel board in ChannelSession.Settings.RemoteBoards)
             {
-                foreach (RemoteBoardGroupModel group in board.Groups)
-                {
-                    foreach (RemoteBoardItemModel item in group.Items.Where(i => i.Command == null).ToList())
-                    {
-                        group.Items.Remove(item);
-                    }
+                this.boards.Add(board);
+            }
 
-                    foreach (RemoteBoardItemModel item in group.Items)
-                    {
-                        item.SetValuesFromCommand();
-                    }
+            if (this.boards.Count > 0)
+            {
+                if (this.CurrentBoard != null)
+                {
+                    this.BoardNameComboBox.SelectedItem = this.CurrentBoard;
+                }
+                else
+                {
+                    this.BoardNameComboBox.SelectedIndex = 0;
                 }
             }
-            this.RefreshBoardItemsView();
-        }
-
-        private void RemoteCommandsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (this.RemoteCommandsListView.SelectedItem != null)
+            else
             {
-                RemoteCommand command = (RemoteCommand)this.RemoteCommandsListView.SelectedItem;
-                this.CurrentlySelectedCommand = command;
-            }
-        }
-
-        private void DataGridRow_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            DataGridRow row = sender as DataGridRow;
-            CommandButtonsControl commandButtonsControl = VisualTreeHelpers.GetVisualChild<CommandButtonsControl>(row);
-            if (commandButtonsControl != null)
-            {
-                RemoteCommand command = commandButtonsControl.GetCommandFromCommandButtons<RemoteCommand>();
-                if (command != null)
-                {
-                    this.CurrentlySelectedCommand = command;
-                }
+                this.RefreshBoardItemsView();
             }
         }
 
@@ -174,7 +96,7 @@ namespace MixItUp.WPF.Controls.MainControls
             if (this.BoardNameComboBox.SelectedIndex >= 0)
             {
                 this.CurrentBoard = (RemoteBoardModel)this.BoardNameComboBox.SelectedItem;
-                this.RefreshBoardGroupsView();
+                this.RefreshBoardItemsView();
             }
         }
 
@@ -224,135 +146,22 @@ namespace MixItUp.WPF.Controls.MainControls
             {
                 await this.Window.RunAsyncOperation(async () =>
                 {
+                    if (this.boards.Count == 1)
+                    {
+                        await MessageBoxHelper.ShowMessageDialog("You must have at least 1 board.");
+                        return;
+                    }
+
                     if (await MessageBoxHelper.ShowConfirmationDialog("Are you sure you wish to delete this board?"))
                     {
                         RemoteBoardModel board = (RemoteBoardModel)this.BoardNameComboBox.SelectedItem;
                         ChannelSession.Settings.RemoteBoards.Remove(board);
                         await ChannelSession.SaveSettings();
 
+                        this.CurrentBoard = null;
                         this.RefreshBoardsView();
                     }
                 });
-            }
-        }
-
-        private void RefreshBoardsView()
-        {
-            this.CurrentBoard = null;
-            this.boards.Clear();
-            foreach (RemoteBoardModel board in ChannelSession.Settings.RemoteBoards)
-            {
-                this.boards.Add(board);
-            }
-
-            if (this.boards.Count > 0)
-            {
-                this.BoardNameComboBox.SelectedIndex = 0;
-            }
-            else
-            {
-                this.RefreshBoardGroupsView();
-            }
-        }
-
-        private void GroupNameComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (this.GroupNameComboBox.SelectedIndex >= 0)
-            {
-                this.CurrentGroup = (RemoteBoardGroupModel)this.GroupNameComboBox.SelectedItem;
-                this.RefreshBoardItemsView();
-            }
-        }
-
-        private async void GroupAddButton_Click(object sender, RoutedEventArgs e)
-        {
-            await this.Window.RunAsyncOperation(async () =>
-            {
-                string name = await MessageBoxHelper.ShowTextEntryDialog("Group Name");
-                if (!string.IsNullOrEmpty(name))
-                {
-                    if (this.CurrentBoard.Groups.Any(b => b.Name.Equals(name)))
-                    {
-                        await MessageBoxHelper.ShowMessageDialog("There already exists a group for this board with this name");
-                        return;
-                    }
-
-                    this.CurrentBoard.Groups.Add(new RemoteBoardGroupModel(name));
-                    await ChannelSession.SaveSettings();
-
-                    this.RefreshBoardsView();
-                }
-            });
-        }
-
-        private async void GroupEditButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.GroupNameComboBox.SelectedIndex >= 0)
-            {
-                RemoteBoardGroupModel group = (RemoteBoardGroupModel)this.GroupNameComboBox.SelectedItem;
-                await this.Window.RunAsyncOperation(async () =>
-                {
-                    string name = await MessageBoxHelper.ShowTextEntryDialog("Group Name", group.Name);
-                    if (!string.IsNullOrEmpty(name))
-                    {
-                        group.Name = name;
-                        await ChannelSession.SaveSettings();
-
-                        this.RefreshBoardsView();
-                    }
-                });
-            }
-        }
-
-        private async void GroupDeleteButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.GroupNameComboBox.SelectedIndex >= 0)
-            {
-                await this.Window.RunAsyncOperation(async () =>
-                {
-                    if (this.groups.Count > 1)
-                    {
-                        if (await MessageBoxHelper.ShowConfirmationDialog("Are you sure you wish to delete this group?"))
-                        {
-                            RemoteBoardGroupModel group = (RemoteBoardGroupModel)this.GroupNameComboBox.SelectedItem;
-                            this.CurrentBoard.Groups.Remove(group);
-                            await ChannelSession.SaveSettings();
-
-                            this.RefreshBoardsView();
-                        }
-                    }
-                    else
-                    {
-                        await MessageBoxHelper.ShowMessageDialog("All boards must have at least 1 group");
-                    }
-                });
-            }
-        }
-
-        private void RefreshBoardGroupsView()
-        {
-            this.CurrentGroup = null;
-            this.groups.Clear();
-            if (this.CurrentBoard != null)
-            {
-                this.GroupNameComboBox.IsEnabled = true;
-                foreach (RemoteBoardGroupModel group in this.CurrentBoard.Groups)
-                {
-                    this.groups.Add(group);
-                }
-            }
-            else
-            {
-                this.GroupNameComboBox.IsEnabled = false;
-            }
-
-            if (this.groups.Count > 0)
-            {
-                this.GroupNameComboBox.SelectedIndex = 0;
-            }
-            else
-            {
-                this.RefreshBoardItemsView();
             }
         }
 
@@ -362,14 +171,21 @@ namespace MixItUp.WPF.Controls.MainControls
             this.Button10.ClearCommand();
             this.Button20.ClearCommand();
             this.Button30.ClearCommand();
+            this.Button40.ClearCommand();
             this.Button01.ClearCommand();
             this.Button11.ClearCommand();
             this.Button21.ClearCommand();
             this.Button31.ClearCommand();
+            this.Button41.ClearCommand();
+            this.Button02.ClearCommand();
+            this.Button12.ClearCommand();
+            this.Button22.ClearCommand();
+            this.Button32.ClearCommand();
+            this.Button42.ClearCommand();
 
-            if (this.CurrentGroup != null)
+            if (this.CurrentBoard != null)
             {
-                foreach (RemoteBoardItemModel item in this.CurrentGroup.Items)
+                foreach (RemoteBoardItemModel item in this.CurrentBoard.Items)
                 {
                     if (item.YPosition == 0)
                     {
@@ -388,6 +204,10 @@ namespace MixItUp.WPF.Controls.MainControls
                         else if (item.XPosition == 3)
                         {
                             this.Button30.SetRemoteItem(item);
+                        }
+                        else if (item.XPosition == 3)
+                        {
+                            this.Button40.SetRemoteItem(item);
                         }
                     }
                     else if (item.YPosition == 1)
@@ -408,31 +228,112 @@ namespace MixItUp.WPF.Controls.MainControls
                         {
                             this.Button31.SetRemoteItem(item);
                         }
+                        else if (item.XPosition == 4)
+                        {
+                            this.Button41.SetRemoteItem(item);
+                        }
+                    }
+                    else if (item.YPosition == 2)
+                    {
+                        if (item.XPosition == 0)
+                        {
+                            this.Button02.SetRemoteItem(item);
+                        }
+                        else if (item.XPosition == 1)
+                        {
+                            this.Button12.SetRemoteItem(item);
+                        }
+                        else if (item.XPosition == 2)
+                        {
+                            this.Button22.SetRemoteItem(item);
+                        }
+                        else if (item.XPosition == 3)
+                        {
+                            this.Button32.SetRemoteItem(item);
+                        }
+                        else if (item.XPosition == 4)
+                        {
+                            this.Button42.SetRemoteItem(item);
+                        }
                     }
                 }
             }
         }
 
-        private async void ConnectRemoteButton_Click(object sender, RoutedEventArgs e)
+        private async void ConnectStreamDeckButton_Click(object sender, RoutedEventArgs e)
         {
             await this.Window.RunAsyncOperation(async () =>
             {
                 await ChannelSession.SaveSettings();
 
-                this.remoteService = new RemoteService();
+                if (await ChannelSession.Services.InitializeStreamDeck())
+                {
+                    ChannelSession.Services.StreamDeck.ConnectionStateChangeOccurred += StreamDeck_ConnectionStateChangeOccurred;
+                    ChannelSession.Services.StreamDeck.KeyChangeOccurred += StreamDeck_KeyChangeOccurred;
 
-                this.remoteService.OnDisconnectOccurred += RemoteService_OnDisconnectOccurred;
-                this.remoteService.OnAuthRequest += RemoteService_OnAuthRequest;
-                this.remoteService.OnNewAccessCode += RemoteService_OnNewAccessCode;
-                this.remoteService.OnBoardRequest += RemoteService_OnBoardRequest;
-                this.remoteService.OnActionRequest += RemoteService_OnActionRequest;
+                    this.MainGrid.Visibility = Visibility.Collapsed;
+                    this.ConnectToStreamDeckGrid.Visibility = Visibility.Visible;
 
-                await this.remoteService.Connect();
+                    this.AccessCodeTextBlock.Text = ChannelSession.Services.Remote.AccessCode;
+                    this.RemoteEventsTextBlock.Text = string.Empty;
+                }
+                else
+                {
+                    await MessageBoxHelper.ShowMessageDialog("Failed to find/connect to a Stream Deck. Please ensure it is plugged in");
+                }
+            });
+        }
 
-                this.BoardSetupGrid.Visibility = Visibility.Collapsed;
-                this.ConnectToDeviceGrid.Visibility = Visibility.Visible;
+        private void StreamDeck_KeyChangeOccurred(object sender, StreamDeckKeyEvent e)
+        {
+            if (e.IsDown)
+            {
+                this.StreamDeckEventsTextBlock.Text += "Key " + e.KeyID + " Pressed";
+            }
+        }
 
-                this.AccessCodeTextBlock.Text = this.remoteService.AccessCode;
+        private void StreamDeck_ConnectionStateChangeOccurred(object sender, bool e)
+        {
+            this.StreamDeckEventsTextBlock.Text += "Stream Deck " + ((e) ? "Connected" : "Disconnected");
+        }
+
+        private async void DisconnectStreamDeckButton_Click(object sender, RoutedEventArgs e)
+        {
+            await this.DisconnectStreamDeck();
+        }
+
+        private async Task DisconnectStreamDeck()
+        {
+            await this.Window.RunAsyncOperation(async () =>
+            {
+                ChannelSession.Services.StreamDeck.ConnectionStateChangeOccurred -= StreamDeck_ConnectionStateChangeOccurred;
+                ChannelSession.Services.StreamDeck.KeyChangeOccurred -= StreamDeck_KeyChangeOccurred;
+
+                await ChannelSession.Services.DisconnectStreamDeck();
+
+                this.ConnectToStreamDeckGrid.Visibility = Visibility.Collapsed;
+                this.MainGrid.Visibility = Visibility.Visible;
+            });
+        }
+
+        private async void ConnectMixItUpRemoteButton_Click(object sender, RoutedEventArgs e)
+        {
+            await this.Window.RunAsyncOperation(async () =>
+            {
+                await ChannelSession.SaveSettings();
+
+                ChannelSession.Services.Remote.OnDisconnectOccurred += RemoteService_OnDisconnectOccurred;
+                ChannelSession.Services.Remote.OnAuthRequest += RemoteService_OnAuthRequest;
+                ChannelSession.Services.Remote.OnNewAccessCode += RemoteService_OnNewAccessCode;
+                ChannelSession.Services.Remote.OnBoardRequest += RemoteService_OnBoardRequest;
+                ChannelSession.Services.Remote.OnActionRequest += RemoteService_OnActionRequest;
+
+                await ChannelSession.Services.Remote.Connect();
+
+                this.MainGrid.Visibility = Visibility.Collapsed;
+                this.ConnectToRemoteGrid.Visibility = Visibility.Visible;
+
+                this.AccessCodeTextBlock.Text = ChannelSession.Services.Remote.AccessCode;
                 this.RemoteEventsTextBlock.Text = string.Empty;
             });
         }
@@ -459,12 +360,12 @@ namespace MixItUp.WPF.Controls.MainControls
                     authRequest.DeviceInfo + Environment.NewLine + Environment.NewLine +
                     "Would you like to approve this device?"))
                 {
-                    await this.remoteService.SendAuthClientGrant(authRequest);
+                    await ChannelSession.Services.Remote.SendAuthClientGrant(authRequest);
                     this.RemoteEventsTextBlock.Text += "Device Authorization Approved: " + authRequest.DeviceInfo + Environment.NewLine;
                 }
                 else
                 {
-                    await this.remoteService.SendAuthClientDeny();
+                    await ChannelSession.Services.Remote.SendAuthClientDeny();
                     this.RemoteEventsTextBlock.Text += "Device Authorization Denied: " + authRequest.DeviceInfo + Environment.NewLine;
                 }
             });
@@ -472,7 +373,7 @@ namespace MixItUp.WPF.Controls.MainControls
 
         private void RemoteService_OnNewAccessCode(object sender, AccessCodeNewRemoteMessage e)
         {
-            this.AccessCodeTextBlock.Text = this.remoteService.AccessCode;
+            this.AccessCodeTextBlock.Text = ChannelSession.Services.Remote.AccessCode;
         }
 
         private void RemoteService_OnBoardRequest(object sender, RemoteBoardModel board)
@@ -489,31 +390,23 @@ namespace MixItUp.WPF.Controls.MainControls
         {
             await this.Window.RunAsyncOperation(async () =>
             {
-                this.remoteService.OnDisconnectOccurred -= RemoteService_OnDisconnectOccurred;
-                this.remoteService.OnAuthRequest -= RemoteService_OnAuthRequest;
-                this.remoteService.OnNewAccessCode -= RemoteService_OnNewAccessCode;
-                this.remoteService.OnBoardRequest -= RemoteService_OnBoardRequest;
-                this.remoteService.OnActionRequest -= RemoteService_OnActionRequest;
+                ChannelSession.Services.Remote.OnDisconnectOccurred -= RemoteService_OnDisconnectOccurred;
+                ChannelSession.Services.Remote.OnAuthRequest -= RemoteService_OnAuthRequest;
+                ChannelSession.Services.Remote.OnNewAccessCode -= RemoteService_OnNewAccessCode;
+                ChannelSession.Services.Remote.OnBoardRequest -= RemoteService_OnBoardRequest;
+                ChannelSession.Services.Remote.OnActionRequest -= RemoteService_OnActionRequest;
 
-                await this.remoteService.Disconnect();
+                await ChannelSession.Services.Remote.Disconnect();
 
-                this.remoteService = null;
-
-                this.ConnectToDeviceGrid.Visibility = Visibility.Collapsed;
-                this.BoardSetupGrid.Visibility = Visibility.Visible;
+                this.ConnectToRemoteGrid.Visibility = Visibility.Collapsed;
+                this.MainGrid.Visibility = Visibility.Visible;
             });
-        }
-
-        private void Window_Closed(object sender, System.EventArgs e)
-        {
-            this.RefreshCommandsList();
-            this.UpdateRemoteItemsAndBoard();
         }
 
         private void SecretBetaAccess_Click(object sender, RoutedEventArgs e)
         {
             this.InBetaGrid.Visibility = Visibility.Collapsed;
-            this.BoardSetupGrid.Visibility = Visibility.Visible;
+            this.MainGrid.Visibility = Visibility.Visible;
         }
     }
 }

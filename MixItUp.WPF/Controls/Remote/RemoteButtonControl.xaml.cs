@@ -1,8 +1,11 @@
 ﻿using MixItUp.Base;
 using MixItUp.Base.Commands;
 using MixItUp.Base.Model.Remote;
+using MixItUp.WPF.Controls.Command;
 using MixItUp.WPF.Controls.MainControls;
-using System.Linq;
+using MixItUp.WPF.Windows.Command;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -33,9 +36,13 @@ namespace MixItUp.WPF.Controls.Remote
 
         public void SetRemoteItem(RemoteBoardItemModel item)
         {
-            if (this.remoteControl.CurrentBoard != null && this.remoteControl.CurrentGroup != null && item != null && item.Command != null)
+            if (item != null && item.Command != null)
             {
-                this.RemoveRemoteItem();
+                this.ClearCommand();
+
+                this.AddCommandButton.Visibility = Visibility.Collapsed;
+                this.CommandButtonsPopup.Visibility = Visibility.Visible;
+
                 this.item = item;
 
                 this.item.SetValuesFromCommand();
@@ -45,71 +52,79 @@ namespace MixItUp.WPF.Controls.Remote
                 this.item.YPosition = this.yPosition;
 
                 this.NameTextBlock.Text = this.item.Name;
-                this.DeleteButton.Visibility = System.Windows.Visibility.Visible;
                 if (item is RemoteBoardButtonModel)
                 {
                     RemoteBoardButtonModel button = this.item as RemoteBoardButtonModel;
                     this.NameTextBlock.Foreground = new BrushConverter().ConvertFromString(button.TextColor) as SolidColorBrush;
                     this.BackgroundColor.Fill = new BrushConverter().ConvertFromString(button.BackgroundColor) as SolidColorBrush;
-                }
 
-                if (!this.remoteControl.CurrentGroup.Items.Contains(this.item))
-                {
-                    this.remoteControl.CurrentGroup.Items.Add(this.item);
+                    //this.CommandButtons.DataContext = this.item.Command;
                 }
                 return;
             }
-        }
-
-        public void SetRemoteCommand(RemoteCommand command)
-        {
-            this.SetRemoteItem(new RemoteBoardButtonModel(command));
         }
 
         public void ClearCommand()
         {
             this.item = null;
             this.NameTextBlock.Text = "";
-            this.DeleteButton.Visibility = System.Windows.Visibility.Collapsed;
             this.NameTextBlock.Foreground = Brushes.Black;
             this.BackgroundColor.Fill = Brushes.Transparent;
+
+            this.AddCommandButton.Visibility = Visibility.Visible;
+            this.CommandButtonsPopup.Visibility = Visibility.Collapsed;
         }
 
-        private void RemoveRemoteItem()
+        private void CommandButtons_EditClicked(object sender, RoutedEventArgs e)
         {
-            if (this.remoteControl.CurrentBoard != null && this.remoteControl.CurrentGroup != null)
+            CommandButtonsControl commandButtonsControl = (CommandButtonsControl)sender;
+            RemoteCommand command = commandButtonsControl.GetCommandFromCommandButtons<RemoteCommand>(sender);
+            if (command != null)
             {
-                this.remoteControl.CurrentGroup.Items.Remove(this.item);
+                CommandWindow window = new CommandWindow(new RemoteCommandDetailsControl(command));
+                window.Closed += Window_Closed;
+                window.Show();
             }
-            this.ClearCommand();
         }
 
-        private void ButtonRender_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private async void CommandButtons_DeleteClicked(object sender, RoutedEventArgs e)
         {
-            if (this.remoteControl.CurrentlySelectedCommand != null)
+            await this.remoteControl.Window.RunAsyncOperation(async () =>
             {
-                this.SetRemoteCommand(this.remoteControl.CurrentlySelectedCommand);
-            }
-            this.remoteControl.CurrentlySelectedCommand = null;
-            this.remoteControl.ResetListSelectedIndex();
+                CommandButtonsControl commandButtonsControl = (CommandButtonsControl)sender;
+                RemoteCommand command = commandButtonsControl.GetCommandFromCommandButtons<RemoteCommand>(sender);
+                if (command != null)
+                {
+                    ChannelSession.Settings.RemoteCommands.Remove(command);
+                    await ChannelSession.SaveSettings();
 
-            e.Handled = true;
+                    this.ClearCommand();
+                    this.remoteControl.RefreshBoardsView();
+                }
+            });
         }
 
-        private void DeleteButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private async void Window_Closed(object sender, System.EventArgs e)
         {
-            this.remoteControl.CurrentGroup.Items.Remove(this.item);
-            this.RemoveRemoteItem();
+            await this.remoteControl.Window.RunAsyncOperation(async () =>
+            {
+                await ChannelSession.SaveSettings();
+
+                this.remoteControl.RefreshBoardsView();
+            });
         }
 
-        private void DeleteButton_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        private void AddCommandButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DeleteButton.Opacity = 1.0;
+            CommandWindow window = new CommandWindow(new RemoteCommandDetailsControl());
+            window.CommandSaveSuccessfully += Window_CommandSaveSuccessfully;
+            window.Closed += Window_Closed;
+            window.Show();
         }
 
-        private void DeleteButton_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        private void Window_CommandSaveSuccessfully(object sender, CommandBase e)
         {
-            this.DeleteButton.Opacity = 0.3;
+            this.remoteControl.CurrentBoard.Items.Add(new RemoteBoardButtonModel((RemoteCommand)e, this.xPosition, this.yPosition));
         }
     }
 }

@@ -424,6 +424,8 @@ namespace MixItUp.Desktop
             this.BannedWords = new LockedList<string>();
             this.CommunityFilteredWords = new LockedList<string>();
             this.InteractiveUserGroups = new LockedDictionary<uint, List<InteractiveUserGroupViewModel>>();
+
+            this.RemoteBoards.Add(new RemoteBoardModel("Default"));
         }
 
         public async Task Initialize()

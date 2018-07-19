@@ -29,6 +29,7 @@ namespace MixItUp.Base.Services
         public IDiscordService Discord { get; protected set; }
         public ITiltifyService Tiltify { get; protected set; }
         public ITelemetryService Telemetry { get; protected set; }
+        public IMixItUpRemoteService Remote { get; protected set; }
         public IStreamDeckService StreamDeck { get; protected set; }
 
         public abstract Task Close();

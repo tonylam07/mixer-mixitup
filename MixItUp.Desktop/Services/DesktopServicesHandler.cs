@@ -17,6 +17,8 @@ namespace MixItUp.Desktop.Services
         public void Initialize()
         {
             this.MixItUpService = new MixItUpService();
+            this.Remote = new MixItUpRemoteService();
+
             this.MixerStatus = new MixerStatusService();
 
             this.Settings = new DesktopSettingsService();

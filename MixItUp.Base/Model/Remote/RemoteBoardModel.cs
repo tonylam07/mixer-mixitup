@@ -25,13 +25,13 @@ namespace MixItUp.Base.Model.Remote
         public string BackgroundImageName { get; set; }
 
         [DataMember]
-        public List<RemoteBoardGroupModel> Groups { get; set; }
+        public List<RemoteBoardItemModel> Items { get; set; }
         [DataMember]
         public Dictionary<string, string> Images { get; set; }
 
         public RemoteBoardModel()
         {
-            this.Groups = new List<RemoteBoardGroupModel>();
+            this.Items = new List<RemoteBoardItemModel>();
             this.Images = new Dictionary<string, string>();
         }
 
@@ -40,37 +40,11 @@ namespace MixItUp.Base.Model.Remote
         {
             this.ID = Guid.NewGuid();
             this.Name = name;
-
-            this.Groups.Add(new RemoteBoardGroupModel("Default"));
         }
 
         public RemoteBoardModel ToSimpleModel()
         {
             return new RemoteBoardModel() { ID = this.ID, Name = this.Name };
-        }
-    }
-
-    [DataContract]
-    public class RemoteBoardGroupModel
-    {
-        [DataMember]
-        public Guid ID { get; set; }
-        [DataMember]
-        public string Name { get; set; }
-
-        [DataMember]
-        public List<RemoteBoardItemModel> Items { get; set; }
-
-        public RemoteBoardGroupModel()
-        {
-            this.Items = new List<RemoteBoardItemModel>();
-        }
-
-        public RemoteBoardGroupModel(string name)
-            : this()
-        {
-            this.ID = Guid.NewGuid();
-            this.Name = name;
         }
     }
 }

@@ -51,10 +51,12 @@ namespace MixItUp.Base.Model.Remote
 
         public RemoteBoardButtonModel() { }
 
-        public RemoteBoardButtonModel(RemoteCommand command)
+        public RemoteBoardButtonModel(RemoteCommand command, int xPosition, int yPosition)
         {
             this.ID = command.ID;
             this.Name = command.Name;
+            this.XPosition = xPosition;
+            this.YPosition = yPosition;
 
             this.SetValuesFromCommand();
         }

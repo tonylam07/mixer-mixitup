@@ -15,6 +15,7 @@ namespace MixItUp.WPF.Controls.Command
         public RemoteCommandDetailsControl(RemoteCommand command)
         {
             this.command = command;
+
             InitializeComponent();
         }
 

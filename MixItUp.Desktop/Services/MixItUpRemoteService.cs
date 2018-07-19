@@ -2,6 +2,7 @@
 using MixItUp.Base;
 using MixItUp.Base.Commands;
 using MixItUp.Base.Model.Remote;
+using MixItUp.Base.Services;
 using MixItUp.Base.Util;
 using Newtonsoft.Json;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MixItUp.Desktop.Services
 {
-    public class RemoteService : WebSocketClientBase
+    public class MixItUpRemoteService : WebSocketClientBase, IMixItUpRemoteService
     {
         private const string BaseAddress = "ws://sockets.mixitupapp.com/Remote?SessionMode={0}&DeviceRole={1}&DeviceID={2}&SessionID={3}&AutoAccept={4}&AccessCode={5}&AuthToken={6}&DeviceInfo={7}";
 
@@ -37,20 +38,20 @@ namespace MixItUp.Desktop.Services
 
         public static string GetConnectConnectionURL(Guid id, bool autoAccept = false, string authToken = null)
         {
-            return RemoteService.GetConnectionURL("CONNECT", "HOST", id, null, autoAccept, null, authToken);
+            return MixItUpRemoteService.GetConnectionURL("CONNECT", "HOST", id, null, autoAccept, null, authToken);
         }
 
         public static string GetReconnectConnectionURL(Guid id, string sessionID = null, bool autoAccept = false, string authToken = null)
         {
-            return RemoteService.GetConnectionURL("RECONNECT", "HOST", id, null, autoAccept, sessionID, authToken);
+            return MixItUpRemoteService.GetConnectionURL("RECONNECT", "HOST", id, null, autoAccept, sessionID, authToken);
         }
 
         private static string GetConnectionURL(string sessionMode, string deviceRole, Guid id, string sessionID = null, bool autoAccept = false, string accessCode = null, string authToken = null, string deviceInfo = null)
         {
-            return string.Format(RemoteService.BaseAddress, sessionMode, deviceRole, id.ToString(), sessionID, autoAccept, accessCode, authToken, deviceInfo);
+            return string.Format(MixItUpRemoteService.BaseAddress, sessionMode, deviceRole, id.ToString(), sessionID, autoAccept, accessCode, authToken, deviceInfo);
         }
 
-        public RemoteService()
+        public MixItUpRemoteService()
         {
             this.ClientID = Guid.NewGuid();
 
@@ -59,7 +60,7 @@ namespace MixItUp.Desktop.Services
 
         public async Task<bool> Connect()
         {
-            return await this.Connect(RemoteService.GetConnectConnectionURL(this.ClientID));
+            return await this.Connect(MixItUpRemoteService.GetConnectConnectionURL(this.ClientID));
         }
 
         public override async Task<bool> Connect(string endpoint)
@@ -84,11 +85,6 @@ namespace MixItUp.Desktop.Services
         {
             this.OnDisconnectOccurred -= RemoteService_OnDisconnectOccurred;
             await base.Disconnect(closeStatus);
-        }
-
-        private void ConnectHeartbeat(object sender, HeartbeatRemoteMessage e)
-        {
-            this.Connected = true;
         }
 
         public async Task SendAuthClientGrant(AuthRequestRemoteMessage authRequest)
@@ -184,6 +180,11 @@ namespace MixItUp.Desktop.Services
                 }
             }
             catch (Exception ex) { Logger.Log(ex); }
+        }
+
+        private void ConnectHeartbeat(object sender, HeartbeatRemoteMessage e)
+        {
+            this.Connected = true;
         }
 
         private async Task ReceiveHeartbeat(string packet)

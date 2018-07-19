@@ -17,49 +17,7 @@
 
              d:DesignHeight="500" d:DesignWidth="600">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="20" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="10" />
-            </Grid.RowDefinitions>
-
-            <DataGrid x:Name="RemoteCommandsListView" Grid.Row="0" Style="{StaticResource StandardDataGrid}" CellStyle="{StaticResource StandardDataGridCell}" HorizontalContentAlignment="Stretch" SelectionChanged="RemoteCommandsListView_SelectionChanged">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" Width="*" />
-                    <DataGridTemplateColumn Header="Actions" Width="240">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <CommandControls:CommandButtonsControl x:Name="CommandButtons" HorizontalAlignment="Center" EditClicked="CommandButtons_EditClicked" DeleteClicked="CommandButtons_DeleteClicked" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-
-            <Grid Grid.Row="2" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="20" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                
-                <Button x:Name="AddReferenceCommandButton" Grid.Column="0" Click="AddReferenceCommandButton_Click">Reference Command</Button>
-
-                <Button x:Name="AddCommandButton" Grid.Column="2" Click="AddCommandButton_Click">New Command</Button>
-            </Grid>
-        </Grid>
-
-        <Border Grid.Column="1" BorderThickness="1" BorderBrush="{StaticResource PrimaryHueMidBrush}" />
-
-        <Grid x:Name="InBetaGrid" Grid.Column="2" Visibility="Visible" VerticalAlignment="Center">
+        <Grid x:Name="InBetaGrid" Visibility="Visible" VerticalAlignment="Center">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -73,147 +31,153 @@
             </Grid>
         </Grid>
 
-        <Grid x:Name="BoardSetupGrid" Grid.Column="2" Visibility="Collapsed" VerticalAlignment="Center">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="20" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="20" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="30" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="20" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <Grid Grid.Row="0">
+        <Grid x:Name="MainGrid" Visibility="Collapsed">
+            <Grid x:Name="SetupGrid" VerticalAlignment="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                
-                <TextBlock Grid.Row="0" TextWrapping="Wrap" HorizontalAlignment="Center" Width="350">Getting Started: Add a new board, click the row of a Remote Command on the left, then click on the desired board slot to set the command there.</TextBlock>
-            </Grid>
 
-            <Grid Grid.Row="2" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="20" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="10" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="10" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <ComboBox x:Name="BoardNameComboBox" Grid.Column="0" MaterialDesign:HintAssist.Hint="Board Name" DisplayMemberPath="Name" SelectionChanged="BoardNameComboBox_SelectionChanged" Width="200" />
-
-                <Button x:Name="BoardAddButton" Grid.Column="2" Click="BoardAddButton_Click" Width="40" HorizontalAlignment="Center" ToolTip="Add Board">
-                    <MaterialDesign:PackIcon Kind="Plus" Height="24" Width="24" Margin="-13,-10" Foreground="{StaticResource WhiteColor}" />
-                </Button>
-
-                <Button x:Name="BoardEditButton" Grid.Column="4" Click="BoardEditButton_Click" Width="40" HorizontalAlignment="Center" ToolTip="Edit Board">
-                    <MaterialDesign:PackIcon Kind="TooltipEdit" Height="24" Width="24" Margin="-13,-10" Foreground="{StaticResource WhiteColor}" />
-                </Button>
-
-                <Button x:Name="BoardDeleteButton" Grid.Column="6" Click="BoardDeleteButton_Click" Width="40" HorizontalAlignment="Center" ToolTip="Delete Board">
-                    <MaterialDesign:PackIcon Kind="Delete" Height="24" Width="24" Margin="-13,-10" Foreground="{StaticResource WhiteColor}" />
-                </Button>
-            </Grid>
-
-            <Grid Grid.Row="4" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="20" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="10" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="10" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <ComboBox x:Name="GroupNameComboBox" Grid.Column="0" MaterialDesign:HintAssist.Hint="Group Name" DisplayMemberPath="Name" SelectionChanged="GroupNameComboBox_SelectionChanged" Width="200" />
-
-                <Button x:Name="GroupAddButton" Grid.Column="2" Click="GroupAddButton_Click" Width="40" HorizontalAlignment="Center" ToolTip="Add Group">
-                    <MaterialDesign:PackIcon Kind="Plus" Height="24" Width="24" Margin="-13,-10" Foreground="{StaticResource WhiteColor}" />
-                </Button>
-
-                <Button x:Name="GroupEditButton" Grid.Column="4" Click="GroupEditButton_Click" Width="40" HorizontalAlignment="Center" ToolTip="Edit Group">
-                    <MaterialDesign:PackIcon Kind="TooltipEdit" Height="24" Width="24" Margin="-13,-10" Foreground="{StaticResource WhiteColor}" />
-                </Button>
-
-                <Button x:Name="GroupDeleteButton" Grid.Column="6" Click="GroupDeleteButton_Click" Width="40" HorizontalAlignment="Center" ToolTip="Delete Group">
-                    <MaterialDesign:PackIcon Kind="Delete" Height="24" Width="24" Margin="-13,-10" Foreground="{StaticResource WhiteColor}" />
-                </Button>
-            </Grid>
-
-            <Border Grid.Row="6" BorderThickness="1" BorderBrush="{StaticResource PrimaryHueMidBrush}" HorizontalAlignment="Center">
-                <Grid x:Name="BoardGrid" Margin="5">
+                <Grid Grid.Row="0" HorizontalAlignment="Center">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="80" />
-                        <ColumnDefinition Width="5" />
-                        <ColumnDefinition Width="80" />
-                        <ColumnDefinition Width="5" />
-                        <ColumnDefinition Width="80" />
-                        <ColumnDefinition Width="5" />
-                        <ColumnDefinition Width="80" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="80" />
-                        <RowDefinition Height="5" />
-                        <RowDefinition Height="80" />
-                    </Grid.RowDefinitions>
 
-                    <RemoteControls:RemoteButtonControl x:Name="Button00" Grid.Column="0" Grid.Row="0" />
+                    <ComboBox x:Name="BoardNameComboBox" Grid.Column="0" MaterialDesign:HintAssist.Hint="Board Name" DisplayMemberPath="Name" SelectionChanged="BoardNameComboBox_SelectionChanged" Width="200" />
 
-                    <RemoteControls:RemoteButtonControl x:Name="Button10" Grid.Column="2" Grid.Row="0" />
+                    <Button x:Name="BoardAddButton" Grid.Column="2" Click="BoardAddButton_Click" Width="40" HorizontalAlignment="Center" ToolTip="Add Board">
+                        <MaterialDesign:PackIcon Kind="Plus" Height="24" Width="24" Margin="-13,-10" Foreground="{StaticResource WhiteColor}" />
+                    </Button>
 
-                    <RemoteControls:RemoteButtonControl x:Name="Button20" Grid.Column="4" Grid.Row="0" />
+                    <Button x:Name="BoardEditButton" Grid.Column="4" Click="BoardEditButton_Click" Width="40" HorizontalAlignment="Center" ToolTip="Edit Board">
+                        <MaterialDesign:PackIcon Kind="TooltipEdit" Height="24" Width="24" Margin="-13,-10" Foreground="{StaticResource WhiteColor}" />
+                    </Button>
 
-                    <RemoteControls:RemoteButtonControl x:Name="Button30" Grid.Column="6" Grid.Row="0" />
-
-                    <RemoteControls:RemoteButtonControl x:Name="Button01" Grid.Column="0" Grid.Row="2" />
-
-                    <RemoteControls:RemoteButtonControl x:Name="Button11" Grid.Column="2" Grid.Row="2" />
-
-                    <RemoteControls:RemoteButtonControl x:Name="Button21" Grid.Column="4" Grid.Row="2" />
-
-                    <RemoteControls:RemoteButtonControl x:Name="Button31" Grid.Column="6" Grid.Row="2" />
+                    <Button x:Name="BoardDeleteButton" Grid.Column="6" Click="BoardDeleteButton_Click" Width="40" HorizontalAlignment="Center" ToolTip="Delete Board">
+                        <MaterialDesign:PackIcon Kind="Delete" Height="24" Width="24" Margin="-13,-10" Foreground="{StaticResource WhiteColor}" />
+                    </Button>
                 </Grid>
-            </Border>
 
-            <Button x:Name="ConnectRemoteButton" Grid.Row="8" Click="ConnectRemoteButton_Click" Width="160">Connect To Device</Button>
-        </Grid>
+                <Border Grid.Row="2" BorderThickness="1" BorderBrush="{StaticResource PrimaryHueMidBrush}" HorizontalAlignment="Center">
+                    <Grid x:Name="BoardGrid" Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="80" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="80" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="80" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="80" />
+                        </Grid.RowDefinitions>
 
-        <Grid x:Name="ConnectToDeviceGrid" Grid.Column="2" Visibility="Collapsed" Margin="10,20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="40" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="40" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="40" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+                        <RemoteControls:RemoteButtonControl x:Name="Button00" Grid.Column="0" Grid.Row="0" />
 
-            <TextBlock Grid.Row="0" TextWrapping="Wrap" HorizontalAlignment="Center" Style="{StaticResource HeaderTextBlock}">Launch Mix It Up on your mobile device and enter the access code below to connect. You will then receive a notification here asking you to approve or deny the device.</TextBlock>
+                        <RemoteControls:RemoteButtonControl x:Name="Button10" Grid.Column="2" Grid.Row="0" />
 
-            <Grid Grid.Row="2" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="20" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+                        <RemoteControls:RemoteButtonControl x:Name="Button20" Grid.Column="4" Grid.Row="0" />
 
-                <TextBlock Grid.Column="0" Style="{StaticResource HeaderTextBlock}">Access Code:</TextBlock>
+                        <RemoteControls:RemoteButtonControl x:Name="Button30" Grid.Column="6" Grid.Row="0" />
 
-                <TextBlock Grid.Column="2" x:Name="AccessCodeTextBlock" />
+                        <RemoteControls:RemoteButtonControl x:Name="Button40" Grid.Column="8" Grid.Row="0" />
+
+                        <RemoteControls:RemoteButtonControl x:Name="Button01" Grid.Column="0" Grid.Row="2" />
+
+                        <RemoteControls:RemoteButtonControl x:Name="Button11" Grid.Column="2" Grid.Row="2" />
+
+                        <RemoteControls:RemoteButtonControl x:Name="Button21" Grid.Column="4" Grid.Row="2" />
+
+                        <RemoteControls:RemoteButtonControl x:Name="Button31" Grid.Column="6" Grid.Row="2" />
+
+                        <RemoteControls:RemoteButtonControl x:Name="Button41" Grid.Column="8" Grid.Row="2" />
+
+                        <RemoteControls:RemoteButtonControl x:Name="Button02" Grid.Column="0" Grid.Row="4" />
+
+                        <RemoteControls:RemoteButtonControl x:Name="Button12" Grid.Column="2" Grid.Row="4" />
+
+                        <RemoteControls:RemoteButtonControl x:Name="Button22" Grid.Column="4" Grid.Row="4" />
+
+                        <RemoteControls:RemoteButtonControl x:Name="Button32" Grid.Column="6" Grid.Row="4" />
+
+                        <RemoteControls:RemoteButtonControl x:Name="Button42" Grid.Column="8" Grid.Row="4" />
+                    </Grid>
+                </Border>
+
+                <Grid Grid.Row="4" HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="ConnectStreamDeckButton" Grid.Column="0" Click="ConnectStreamDeckButton_Click" Width="220">Connect To Stream Deck</Button>
+
+                    <Button x:Name="ConnectMixItUpRemoteButton" Grid.Column="2" Click="ConnectMixItUpRemoteButton_Click" Width="220">Connect To Mix It Up Remote</Button>
+                </Grid>
             </Grid>
 
-            <ScrollViewer Grid.Row="4" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
-                <TextBlock x:Name="RemoteEventsTextBlock" TextWrapping="Wrap" />
-            </ScrollViewer>
+            <Grid x:Name="ConnectToStreamDeckGrid" Visibility="Collapsed" Margin="10,20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-            <Button x:Name="DisconnectRemoteButton" Grid.Row="6" Click="DisconnectRemoteButton_Click" Width="120">Disconnect</Button>
+                <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
+                    <TextBlock x:Name="StreamDeckEventsTextBlock" TextWrapping="Wrap" />
+                </ScrollViewer>
+
+                <Button x:Name="DisconnectStreamDeckButton" Grid.Row="2" Click="DisconnectStreamDeckButton_Click" Width="120">Disconnect</Button>
+            </Grid>
+
+            <Grid x:Name="ConnectToRemoteGrid" Visibility="Collapsed" Margin="10,20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" TextWrapping="Wrap" HorizontalAlignment="Center" Style="{StaticResource HeaderTextBlock}">Launch Mix It Up on your mobile device and enter the access code below to connect. You will then receive a notification here asking you to approve or deny the device.</TextBlock>
+
+                <Grid Grid.Row="2" HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Style="{StaticResource HeaderTextBlock}">Access Code:</TextBlock>
+
+                    <TextBlock Grid.Column="2" x:Name="AccessCodeTextBlock" />
+                </Grid>
+
+                <ScrollViewer Grid.Row="4" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
+                    <TextBlock x:Name="RemoteEventsTextBlock" TextWrapping="Wrap" />
+                </ScrollViewer>
+
+                <Button x:Name="DisconnectRemoteButton" Grid.Row="6" Click="DisconnectRemoteButton_Click" Width="120">Disconnect</Button>
+            </Grid>
         </Grid>
     </Grid>
 </local:MainControlBase>
