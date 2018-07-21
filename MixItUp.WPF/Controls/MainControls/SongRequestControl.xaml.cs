@@ -88,6 +88,7 @@ namespace MixItUp.WPF.Controls.MainControls
                     return;
                 }
 
+                ChannelSession.Settings.SongRequestServiceTypes.Clear();
                 if (this.SpotifyToggleButton.IsChecked.GetValueOrDefault()) { ChannelSession.Settings.SongRequestServiceTypes.Add(SongRequestServiceTypeEnum.Spotify); }
                 if (this.YouTubeToggleButton.IsChecked.GetValueOrDefault()) { ChannelSession.Settings.SongRequestServiceTypes.Add(SongRequestServiceTypeEnum.YouTube); }
                 if (this.SoundCloudToggleButton.IsChecked.GetValueOrDefault()) { ChannelSession.Settings.SongRequestServiceTypes.Add(SongRequestServiceTypeEnum.SoundCloud); }
@@ -109,7 +110,7 @@ namespace MixItUp.WPF.Controls.MainControls
 
         private async void EnableSongRequestsToggleButton_Unchecked(object sender, System.Windows.RoutedEventArgs e)
         {
-            ChannelSession.Services.SongRequestService.Disable();
+            await ChannelSession.Services.SongRequestService.Disable();
 
             await this.RefreshRequestsList();
         }

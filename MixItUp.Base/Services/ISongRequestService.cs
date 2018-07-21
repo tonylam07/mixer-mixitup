@@ -1,5 +1,4 @@
 ﻿using MixItUp.Base.ViewModel.User;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,6 +9,8 @@ namespace MixItUp.Base.Services
         Spotify,
         YouTube,
         SoundCloud,
+
+        All = 10
     }
 
     public class SongRequestItem
@@ -26,9 +27,9 @@ namespace MixItUp.Base.Services
 
         Task<bool> Initialize();
 
-        void Disable();
+        Task Disable();
 
-        Task AddSongRequest(UserViewModel user, string identifier);
+        Task AddSongRequest(UserViewModel user, SongRequestServiceTypeEnum service, string identifier, bool pickFirst = false);
         Task RemoveSongRequest(SongRequestItem song);
         Task RemoveLastSongRequestedByUser(UserViewModel user);
 
@@ -41,7 +42,5 @@ namespace MixItUp.Base.Services
 
         Task<IEnumerable<SongRequestItem>> GetAllRequests();
         Task ClearAllRequests();
-
-        void OverlaySongFinished();
     }
 }

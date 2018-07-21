@@ -242,6 +242,11 @@ namespace MixItUp.Base.MixerAPI
             InteractiveParticipantCollectionModel collection = null;
             do
             {
+                if (this.Client == null)
+                {
+                    break;
+                }
+
                 collection = await this.RunAsync(this.Client.GetAllParticipants(startTime));
                 if (collection != null && collection.participants != null)
                 {
@@ -464,19 +469,22 @@ namespace MixItUp.Base.MixerAPI
                 List<InteractiveParticipantModel> participantsToUpdate = new List<InteractiveParticipantModel>();
                 foreach (InteractiveParticipantModel participant in participants)
                 {
-                    UserViewModel user = await ChannelSession.ActiveUsers.AddOrUpdateUser(participant);
-                    if (user != null)
+                    if (participant != null)
                     {
-                        if (this.Client.InteractiveGame != null && ChannelSession.Settings.InteractiveUserGroups.ContainsKey(this.Client.InteractiveGame.id))
+                        UserViewModel user = await ChannelSession.ActiveUsers.AddOrUpdateUser(participant);
+                        if (user != null)
                         {
-                            InteractiveUserGroupViewModel group = ChannelSession.Settings.InteractiveUserGroups[this.Client.InteractiveGame.id].FirstOrDefault(g => g.AssociatedUserRole == user.PrimaryRole);
-                            if (group != null && !string.IsNullOrEmpty(group.DefaultScene))
+                            if (this.Client != null && this.Client.InteractiveGame != null && ChannelSession.Settings.InteractiveUserGroups.ContainsKey(this.Client.InteractiveGame.id))
                             {
-                                bool updateParticipant = !group.DefaultScene.Equals(user.InteractiveGroupID);
-                                user.InteractiveGroupID = group.GroupName;
-                                if (updateParticipant)
+                                InteractiveUserGroupViewModel group = ChannelSession.Settings.InteractiveUserGroups[this.Client.InteractiveGame.id].FirstOrDefault(g => g.AssociatedUserRole == user.PrimaryRole);
+                                if (group != null && !string.IsNullOrEmpty(group.DefaultScene))
                                 {
-                                    participantsToUpdate.Add(user.GetParticipantModel());
+                                    bool updateParticipant = !group.DefaultScene.Equals(user.InteractiveGroupID);
+                                    user.InteractiveGroupID = group.GroupName;
+                                    if (updateParticipant)
+                                    {
+                                        participantsToUpdate.Add(user.GetParticipantModel());
+                                    }
                                 }
                             }
                         }

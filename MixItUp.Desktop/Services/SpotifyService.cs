@@ -297,7 +297,7 @@ namespace MixItUp.Desktop.Services
 
         public async Task<bool> PlaySong(SpotifySong song) { return await this.PlaySong(song.Uri); }
 
-        public async Task<bool> PlayPlaylist(SpotifyPlaylist playlist)
+        public async Task<bool> PlayPlaylist(SpotifyPlaylist playlist, bool random = false)
         {
             try
             {
@@ -310,12 +310,19 @@ namespace MixItUp.Desktop.Services
                 position["position"] = 0;
                 payload["offset"] = position;
 
-                HttpResponseMessage playResponse = await this.PutAsync("me/player/play", this.CreateContentFromObject(payload));
-                await Task.Delay(250);
+                if (random)
+                {
+                    IEnumerable<SpotifySong> playlistSongs = await this.GetPlaylistSongs(playlist);
+                    if (playlistSongs != null && playlistSongs.Count() > 0)
+                    {
+                        Random rand = new Random();
+                        position["position"] = rand.Next(playlistSongs.Count());
+                    }
+                }
+
                 await this.PutAsync("me/player/shuffle?state=true", null);
                 await Task.Delay(250);
-                await this.NextCurrentlyPlaying();
-                await Task.Delay(500);
+                HttpResponseMessage playResponse = await this.PutAsync("me/player/play", this.CreateContentFromObject(payload));
                 return (playResponse.StatusCode == HttpStatusCode.NoContent);
             }
             catch (Exception ex) { Logger.Log(ex); }
