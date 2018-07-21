@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MixItUp.Base.Commands;
+using MixItUp.Base.Model.Remote;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace MixItUp.Base.Services
@@ -19,19 +22,24 @@ namespace MixItUp.Base.Services
     {
         event EventHandler<bool> ConnectionStateChangeOccurred;
         event EventHandler<StreamDeckKeyEvent> KeyChangeOccurred;
+        event EventHandler<RemoteCommand> CommandRun;
 
-        Task<bool> Connect();
+        Task<bool> Connect(RemoteBoardModel board);
         Task Disconnect();
 
         Task SetBrightness(int brightness);
 
-        Task ShowColor(int keyID, byte r, byte g, byte b);
-        Task ShowImage(int keyID, string imageFilePath);
+        Task SetKeyColor(int keyID, byte r, byte g, byte b);
+        Task SetKeyBitmapBytes(int keyID, byte[] data);
+        Task SetKeyBitmapStream(int keyID, Stream stream);
+        Task SetKeyImage(int keyID, string imageFilePath);
 
         Task ClearKey(int keyID);
         Task ClearAllKeys();
 
         Task<int> GetKeyCount();
         Task<int> GetIconSize();
+
+        Tuple<int, int> GetPositionIndexForKeyID(int keyID);
     }
 }

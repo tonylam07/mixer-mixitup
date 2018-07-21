@@ -1,17 +1,23 @@
-﻿using MixItUp.Base.Services;
+﻿using MixItUp.Base.Commands;
+using MixItUp.Base.Model.Remote;
+using MixItUp.Base.Services;
 using MixItUp.Base.Util;
 using StreamDeckSharp;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace MixItUp.Desktop.Services
 {
     public class StreamDeckService : IStreamDeckService
     {
-        public event EventHandler<bool> ConnectionStateChangeOccurred;
-        public event EventHandler<StreamDeckKeyEvent> KeyChangeOccurred;
+        public event EventHandler<bool> ConnectionStateChangeOccurred = delegate { };
+        public event EventHandler<StreamDeckKeyEvent> KeyChangeOccurred = delegate { };
+        public event EventHandler<RemoteCommand> CommandRun = delegate { };
 
         private string deviceName;
+
+        private RemoteBoardModel board;
 
         private IStreamDeck deck;
 
@@ -22,8 +28,10 @@ namespace MixItUp.Desktop.Services
             this.deviceName = deviceName;
         }
 
-        public async Task<bool> Connect()
+        public async Task<bool> Connect(RemoteBoardModel board)
         {
+            this.board = board;
+
             bool result = false;
             try
             {
@@ -33,7 +41,8 @@ namespace MixItUp.Desktop.Services
                     deck.ConnectionStateChanged -= Deck_ConnectionStateChanged;
                     deck.KeyStateChanged -= Deck_KeyStateChanged;
 
-                    deck.ShowLogo();
+                    //deck.ShowLogo();
+
                     deck.ConnectionStateChanged += Deck_ConnectionStateChanged;
                     deck.KeyStateChanged += Deck_KeyStateChanged;
 
@@ -69,7 +78,7 @@ namespace MixItUp.Desktop.Services
             });
         }
 
-        public async Task ShowColor(int keyID, byte r, byte g, byte b)
+        public async Task SetKeyColor(int keyID, byte r, byte g, byte b)
         {
             await this.ConnectionWrapper((deck) =>
             {
@@ -79,7 +88,25 @@ namespace MixItUp.Desktop.Services
             });
         }
 
-        public async Task ShowImage(int keyID, string imageFilePath)
+        public async Task SetKeyBitmapBytes(int keyID, byte[] data)
+        {
+            using (MemoryStream stream = new MemoryStream(data))
+            {
+                await this.SetKeyBitmapStream(keyID, stream);
+            }
+        }
+
+        public async Task SetKeyBitmapStream(int keyID, Stream stream)
+        {
+            await this.ConnectionWrapper((deck) =>
+            {
+                KeyBitmap bitmap = KeyBitmap.FromStream(stream);
+                deck.SetKeyBitmap(keyID, bitmap);
+                return Task.FromResult(0);
+            });
+        }
+
+        public async Task SetKeyImage(int keyID, string imageFilePath)
         {
             await this.ConnectionWrapper((deck) =>
             {
@@ -129,6 +156,11 @@ namespace MixItUp.Desktop.Services
             return result;
         }
 
+        public Tuple<int, int> GetPositionIndexForKeyID(int keyID)
+        {
+            return new Tuple<int, int>(4 - keyID % 5, keyID / 5);
+        }
+
         private async Task ConnectionWrapper(Func<IStreamDeck, Task> action)
         {
             try
@@ -143,17 +175,25 @@ namespace MixItUp.Desktop.Services
 
         private void Deck_ConnectionStateChanged(object sender, ConnectionEventArgs e)
         {
-            if (this.ConnectionStateChangeOccurred != null)
-            {
-                this.ConnectionStateChangeOccurred(this, e.NewConnectionState);
-            }
+            this.ConnectionStateChangeOccurred(this, e.NewConnectionState);
         }
 
-        private void Deck_KeyStateChanged(object sender, KeyEventArgs e)
+        private async void Deck_KeyStateChanged(object sender, KeyEventArgs e)
         {
-            if (this.KeyChangeOccurred != null)
+            this.KeyChangeOccurred(this, new StreamDeckKeyEvent(e.Key, e.IsDown));
+
+            if (e.IsDown)
             {
-                this.KeyChangeOccurred(this, new StreamDeckKeyEvent(e.Key, e.IsDown));
+                Tuple<int, int> keyPosition = this.GetPositionIndexForKeyID(e.Key);
+                foreach (RemoteItemModel item in this.board.Items)
+                {
+                    if (item.Command != null && item.XPosition == keyPosition.Item1 && item.YPosition == keyPosition.Item2)
+                    {
+                        await item.Command.Perform();
+
+                        this.CommandRun(this, item.Command);
+                    }
+                }
             }
         }
     }

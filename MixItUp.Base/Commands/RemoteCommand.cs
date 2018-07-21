@@ -15,7 +15,7 @@ namespace MixItUp.Base.Commands
         public string TextColor { get; set; }
 
         [DataMember]
-        public string ImageName { get; set; }
+        public byte[] ImageData { get; set; }
 
         public RemoteCommand() { }
 

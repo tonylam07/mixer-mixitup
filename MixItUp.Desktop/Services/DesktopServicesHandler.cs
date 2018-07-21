@@ -1,4 +1,5 @@
 ﻿using MixItUp.Base;
+using MixItUp.Base.Model.Remote;
 using MixItUp.Base.Services;
 using MixItUp.Desktop.Audio;
 using MixItUp.Desktop.Files;
@@ -372,10 +373,10 @@ namespace MixItUp.Desktop.Services
             }
         }
 
-        public override async Task<bool> InitializeStreamDeck()
+        public override async Task<bool> InitializeStreamDeck(RemoteBoardModel board)
         {
             this.StreamDeck = (ChannelSession.Settings.StreamDeckDeviceName != null) ? new StreamDeckService(ChannelSession.Settings.StreamDeckDeviceName) : new StreamDeckService();
-            if (await this.StreamDeck.Connect())
+            if (await this.StreamDeck.Connect(board))
             {
                 return true;
             }

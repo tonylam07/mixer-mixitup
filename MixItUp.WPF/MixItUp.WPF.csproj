@@ -76,6 +76,9 @@
       <HintPath>..\packages\NetOffice.Excel.1.7.4.4\lib\net45\ExcelApi.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
+    <Reference Include="ImageProcessor, Version=2.6.2.25, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ImageProcessor.2.6.2.25\lib\net452\ImageProcessor.dll</HintPath>
+    </Reference>
     <Reference Include="LinqToTwitter.AspNet, Version=5.0.0.35873, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\linqtotwitter.5.0.0-beta2\lib\net461\LinqToTwitter.AspNet.dll</HintPath>
     </Reference>
@@ -135,6 +138,7 @@
     <Reference Include="System.Data.SQLite.Linq, Version=1.0.108.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.108.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression">
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.IO.Compression.dll</HintPath>
     </Reference>
@@ -361,6 +365,9 @@
     <Compile Include="Controls\Dialogs\NewCurrencyRankCommandsDialogControl.xaml.cs">
       <DependentUpon>NewCurrencyRankCommandsDialogControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Dialogs\RemoteCommandButtonsDialogControl.xaml.cs">
+      <DependentUpon>RemoteCommandButtonsDialogControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Games\BidGameEditorControl.xaml.cs">
       <DependentUpon>BidGameEditorControl.xaml</DependentUpon>
     </Compile>
@@ -418,9 +425,6 @@
     </Compile>
     <Compile Include="Controls\Command\RemoteCommandDetailsControl.xaml.cs">
       <DependentUpon>RemoteCommandDetailsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Dialogs\RemoteReferenceCommandDialogControl.xaml.cs">
-      <DependentUpon>RemoteReferenceCommandDialogControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\MainControls\RemoteControl.xaml.cs">
       <DependentUpon>RemoteControl.xaml</DependentUpon>
@@ -848,6 +852,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\Dialogs\RemoteCommandButtonsDialogControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Games\BidGameEditorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -921,10 +929,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Command\RemoteCommandDetailsControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Dialogs\RemoteReferenceCommandDialogControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

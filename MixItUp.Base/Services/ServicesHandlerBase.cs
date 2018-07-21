@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using MixItUp.Base.Model.Remote;
+using System.Threading.Tasks;
 
 namespace MixItUp.Base.Services
 {
@@ -73,7 +74,7 @@ namespace MixItUp.Base.Services
         public abstract Task<bool> InitializeTiltify(string authorizationCode = null);
         public abstract Task DisconnectTiltify();
 
-        public abstract Task<bool> InitializeStreamDeck();
+        public abstract Task<bool> InitializeStreamDeck(RemoteBoardModel board);
         public abstract Task DisconnectStreamDeck();
     }
 }

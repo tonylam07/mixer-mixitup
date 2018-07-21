@@ -9,17 +9,10 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Border BorderThickness="1" BorderBrush="{StaticResource PrimaryHueMidBrush}">
         <Grid>
-            <MaterialDesign:PopupBox x:Name="CommandButtonsPopup" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed" StaysOpen="True" IsEnabled="{Binding IsChecked, ElementName=PopupEnabled}">
-                <MaterialDesign:PopupBox.ToggleContent>
-                    <Grid x:Name="ButtonRender">
-                        <Rectangle x:Name="BackgroundColor" Fill="Transparent" />
-                        <TextBlock x:Name="NameTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </Grid>
-                </MaterialDesign:PopupBox.ToggleContent>
-
-                <CommandControls:CommandButtonsControl x:Name="CommandButtons" HorizontalAlignment="Center" VerticalAlignment="Center" EditClicked="CommandButtons_EditClicked" DeleteClicked="CommandButtons_DeleteClicked" />
-
-            </MaterialDesign:PopupBox>
+            <Grid x:Name="ButtonRenderGrid" MouseLeftButtonUp="ButtonRenderGrid_MouseLeftButtonUp">
+                <Rectangle x:Name="BackgroundColor" Visibility="Collapsed" />
+                <TextBlock x:Name="NameTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Grid>
 
             <Button x:Name="AddCommandButton" Click="AddCommandButton_Click" Width="60">Add</Button>
         </Grid>

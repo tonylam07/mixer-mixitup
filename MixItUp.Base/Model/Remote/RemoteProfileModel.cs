@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace MixItUp.Base.Model.Remote
 {
-    public enum RemoteBoardItemSizeEnum
-    {
-        OneByOne,
-        TwoByOne,
-        TwoByTwo,
-    }
-
     [DataContract]
-    public class RemoteBoardModel
+    public class RemoteProfileModel
     {
         [DataMember]
         public Guid ID { get; set; }
@@ -22,27 +14,21 @@ namespace MixItUp.Base.Model.Remote
 
         [DataMember]
         public string Name { get; set; }
-        [DataMember]
-        public bool IsSubBoard { get; set; }
 
         [DataMember]
-        public string BackgroundColor { get; set; }
-        [DataMember]
-        public string BackgroundImageName { get; set; }
+        public RemoteBoardModel MainBoard { get; set; }
 
-        [DataMember]
-        public List<RemoteItemModel> Items { get; set; }
-
-        public RemoteBoardModel()
+        public RemoteProfileModel()
         {
-            this.Items = new List<RemoteItemModel>();
+            this.VersionID = Guid.NewGuid();
         }
 
-        public RemoteBoardModel(string name)
+        public RemoteProfileModel(string name)
             : this()
         {
             this.ID = Guid.NewGuid();
             this.Name = name;
+            this.MainBoard = new RemoteBoardModel("Default");
         }
 
         public RemoteBoardModel ToSimpleModel()

@@ -1,4 +1,6 @@
-﻿using MixItUp.Base;
+﻿using ImageProcessor;
+using ImageProcessor.Imaging.Formats;
+using MixItUp.Base;
 using MixItUp.Base.Commands;
 using MixItUp.Base.Model.Remote;
 using MixItUp.Base.Services;
@@ -7,6 +9,9 @@ using MixItUp.WPF.Util;
 using MixItUp.WPF.Windows.Command;
 using System;
 using System.Collections.ObjectModel;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -32,12 +37,12 @@ namespace MixItUp.WPF.Controls.MainControls
         {
             foreach (RemoteBoardModel board in ChannelSession.Settings.RemoteBoards)
             {
-                foreach (RemoteBoardItemModel item in board.Items.Where(i => i.Command == null).ToList())
+                foreach (RemoteItemModel item in board.Items.Where(i => i.Command == null).ToList())
                 {
                     board.Items.Remove(item);
                 }
 
-                foreach (RemoteBoardItemModel item in board.Items)
+                foreach (RemoteItemModel item in board.Items)
                 {
                     item.SetValuesFromCommand();
                 }
@@ -185,7 +190,7 @@ namespace MixItUp.WPF.Controls.MainControls
 
             if (this.CurrentBoard != null)
             {
-                foreach (RemoteBoardItemModel item in this.CurrentBoard.Items)
+                foreach (RemoteItemModel item in this.CurrentBoard.Items)
                 {
                     if (item.YPosition == 0)
                     {
@@ -266,16 +271,40 @@ namespace MixItUp.WPF.Controls.MainControls
             {
                 await ChannelSession.SaveSettings();
 
-                if (await ChannelSession.Services.InitializeStreamDeck())
+                if (await ChannelSession.Services.InitializeStreamDeck(this.CurrentBoard))
                 {
                     ChannelSession.Services.StreamDeck.ConnectionStateChangeOccurred += StreamDeck_ConnectionStateChangeOccurred;
                     ChannelSession.Services.StreamDeck.KeyChangeOccurred += StreamDeck_KeyChangeOccurred;
+                    ChannelSession.Services.StreamDeck.CommandRun += StreamDeck_CommandRun;
 
-                    this.MainGrid.Visibility = Visibility.Collapsed;
+                    this.SetupGrid.Visibility = Visibility.Collapsed;
                     this.ConnectToStreamDeckGrid.Visibility = Visibility.Visible;
 
-                    this.AccessCodeTextBlock.Text = ChannelSession.Services.Remote.AccessCode;
-                    this.RemoteEventsTextBlock.Text = string.Empty;
+                    int keyCount = await ChannelSession.Services.StreamDeck.GetKeyCount();
+                    int iconSize = await ChannelSession.Services.StreamDeck.GetIconSize();
+
+                    Bitmap bitmap = new Bitmap(iconSize, iconSize, PixelFormat.Format24bppRgb);
+                    for (int x = 0; x < iconSize; x++)
+                    {
+                        for (int y = 0; y < iconSize; y++)
+                        {
+                            bitmap.SetPixel(x, y, Color.White);
+                        }
+                    }
+
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        bitmap.Save(ms, ImageFormat.Bmp);
+                        for (int i = 0; i < keyCount; i++)
+                        {
+                            await ChannelSession.Services.StreamDeck.SetKeyBitmapStream(i, ms);
+                        }
+                    }
+
+
+                    byte[] byteData = await this.ResizeImageToStandardSize(@"C:\Users\Matthew\Downloads\fortnite---button-1520296499714_160h.jpg");
+
+                    await ChannelSession.Services.StreamDeck.SetKeyBitmapBytes(7, byteData);
                 }
                 else
                 {
@@ -284,17 +313,31 @@ namespace MixItUp.WPF.Controls.MainControls
             });
         }
 
+        private void StreamDeck_ConnectionStateChangeOccurred(object sender, bool e)
+        {
+            this.SetStreamDeckEventsText("Stream Deck " + ((e) ? "Connected" : "Disconnected"));
+        }
+
         private void StreamDeck_KeyChangeOccurred(object sender, StreamDeckKeyEvent e)
         {
             if (e.IsDown)
             {
-                this.StreamDeckEventsTextBlock.Text += "Key " + e.KeyID + " Pressed";
+                Tuple<int, int> keyPosition = ChannelSession.Services.StreamDeck.GetPositionIndexForKeyID(e.KeyID);
+                this.SetStreamDeckEventsText("Key [" + keyPosition.Item1 + "," + keyPosition.Item2 + "] Pressed");
             }
         }
 
-        private void StreamDeck_ConnectionStateChangeOccurred(object sender, bool e)
+        private void StreamDeck_CommandRun(object sender, RemoteCommand e)
         {
-            this.StreamDeckEventsTextBlock.Text += "Stream Deck " + ((e) ? "Connected" : "Disconnected");
+            this.SetStreamDeckEventsText("Command " + e.Name + " Run");
+        }
+
+        private void SetStreamDeckEventsText(string text)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                this.StreamDeckEventsTextBlock.Text += text + Environment.NewLine;
+            });
         }
 
         private async void DisconnectStreamDeckButton_Click(object sender, RoutedEventArgs e)
@@ -308,11 +351,12 @@ namespace MixItUp.WPF.Controls.MainControls
             {
                 ChannelSession.Services.StreamDeck.ConnectionStateChangeOccurred -= StreamDeck_ConnectionStateChangeOccurred;
                 ChannelSession.Services.StreamDeck.KeyChangeOccurred -= StreamDeck_KeyChangeOccurred;
+                ChannelSession.Services.StreamDeck.CommandRun -= StreamDeck_CommandRun;
 
                 await ChannelSession.Services.DisconnectStreamDeck();
 
                 this.ConnectToStreamDeckGrid.Visibility = Visibility.Collapsed;
-                this.MainGrid.Visibility = Visibility.Visible;
+                this.SetupGrid.Visibility = Visibility.Visible;
             });
         }
 
@@ -330,7 +374,7 @@ namespace MixItUp.WPF.Controls.MainControls
 
                 await ChannelSession.Services.Remote.Connect();
 
-                this.MainGrid.Visibility = Visibility.Collapsed;
+                this.SetupGrid.Visibility = Visibility.Collapsed;
                 this.ConnectToRemoteGrid.Visibility = Visibility.Visible;
 
                 this.AccessCodeTextBlock.Text = ChannelSession.Services.Remote.AccessCode;
@@ -345,14 +389,14 @@ namespace MixItUp.WPF.Controls.MainControls
 
         private async void RemoteService_OnDisconnectOccurred(object sender, System.Net.WebSockets.WebSocketCloseStatus e)
         {
-            this.RemoteEventsTextBlock.Text += "Disconnection occurred, attempting reconnection..." + Environment.NewLine;
+            this.SetRemoteEventsText("Disconnection occurred, attempting reconnection...");
 
             await this.DisconnectRemote();
         }
 
         private async void RemoteService_OnAuthRequest(object sender, AuthRequestRemoteMessage authRequest)
         {
-            this.RemoteEventsTextBlock.Text += "Device Authorization Requested: " + authRequest.DeviceInfo + Environment.NewLine;
+            this.SetRemoteEventsText("Device Authorization Requested: " + authRequest.DeviceInfo);
 
             await this.Window.RunAsyncOperation(async () =>
             {
@@ -361,12 +405,12 @@ namespace MixItUp.WPF.Controls.MainControls
                     "Would you like to approve this device?"))
                 {
                     await ChannelSession.Services.Remote.SendAuthClientGrant(authRequest);
-                    this.RemoteEventsTextBlock.Text += "Device Authorization Approved: " + authRequest.DeviceInfo + Environment.NewLine;
+                    this.SetRemoteEventsText("Device Authorization Approved: " + authRequest.DeviceInfo);
                 }
                 else
                 {
                     await ChannelSession.Services.Remote.SendAuthClientDeny();
-                    this.RemoteEventsTextBlock.Text += "Device Authorization Denied: " + authRequest.DeviceInfo + Environment.NewLine;
+                    this.SetRemoteEventsText("Device Authorization Denied: " + authRequest.DeviceInfo);
                 }
             });
         }
@@ -378,12 +422,20 @@ namespace MixItUp.WPF.Controls.MainControls
 
         private void RemoteService_OnBoardRequest(object sender, RemoteBoardModel board)
         {
-            this.RemoteEventsTextBlock.Text += "Board Requested: " + board.Name + Environment.NewLine;
+            this.SetRemoteEventsText("Board Requested: " + board.Name);
         }
 
         private void RemoteService_OnActionRequest(object sender, RemoteCommand command)
         {
-            this.RemoteEventsTextBlock.Text += "Command Run: " + command.Name + Environment.NewLine;
+            this.SetRemoteEventsText("Command Run: " + command.Name);
+        }
+
+        private void SetRemoteEventsText(string text)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                this.RemoteEventsTextBlock.Text += text + Environment.NewLine;
+            });
         }
 
         private async Task DisconnectRemote()
@@ -399,7 +451,7 @@ namespace MixItUp.WPF.Controls.MainControls
                 await ChannelSession.Services.Remote.Disconnect();
 
                 this.ConnectToRemoteGrid.Visibility = Visibility.Collapsed;
-                this.MainGrid.Visibility = Visibility.Visible;
+                this.SetupGrid.Visibility = Visibility.Visible;
             });
         }
 
@@ -407,6 +459,34 @@ namespace MixItUp.WPF.Controls.MainControls
         {
             this.InBetaGrid.Visibility = Visibility.Collapsed;
             this.MainGrid.Visibility = Visibility.Visible;
+        }
+
+        private async Task<byte[]> ResizeImageToStandardSize(string imageFilePath)
+        {
+            if (!string.IsNullOrEmpty(imageFilePath) && File.Exists(imageFilePath))
+            {
+                return await Task.Run(() =>
+                {
+                    using (MemoryStream inStream = new MemoryStream(File.ReadAllBytes(imageFilePath)))
+                    {
+                        using (MemoryStream outStream = new MemoryStream())
+                        {
+                            using (ImageFactory imageFactory = new ImageFactory())
+                            {
+                                imageFactory
+                                    .Load(inStream)
+                                    .Resize(new System.Drawing.Size(RemoteItemModel.RequiredSize, RemoteItemModel.RequiredSize))
+                                    .Format(new PngFormat())
+                                    .Quality(100)
+                                    .Save(outStream);
+
+                                return outStream.ToArray();
+                            }
+                        }
+                    }
+                });
+            }
+            return null;
         }
     }
 }

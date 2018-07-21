@@ -60,6 +60,8 @@ namespace MixItUp.WPF.Controls.Command
             set { SetValue(RemoveEnableDisableToggleProperty, value); }
         }
 
+        public bool AskBeforeDelete { get; set; } = true;
+
         public T GetCommandFromCommandButtons<T>() where T : CommandBase { return this.GetCommandFromCommandButtons<T>(this); }
 
         public T GetCommandFromCommandButtons<T>(object sender) where T : CommandBase
@@ -202,7 +204,7 @@ namespace MixItUp.WPF.Controls.Command
 
         private async void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            if (await MessageBoxHelper.ShowConfirmationDialog("Are you sure you want to delete this command?"))
+            if (!this.AskBeforeDelete || await MessageBoxHelper.ShowConfirmationDialog("Are you sure you want to delete this command?"))
             {
                 this.RaiseEvent(new RoutedEventArgs(CommandButtonsControl.DeleteClickedEvent, this));
             }
